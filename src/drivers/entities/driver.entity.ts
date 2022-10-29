@@ -1,4 +1,6 @@
 export class Driver {
+  driver_id: string;
+
   name: string;
 
   birth_date: Date;
@@ -8,5 +10,4 @@ export class Driver {
   car_plate: string;
 
   car_model: string;
-  
 }

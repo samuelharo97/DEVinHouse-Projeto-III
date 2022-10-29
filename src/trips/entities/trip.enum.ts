@@ -1,0 +1,5 @@
+export enum TRIP_STATUS {
+  CREATED,
+  ACCEPTED,
+  REFUSED,
+}
