@@ -3,7 +3,7 @@ import { writeFile, readFile } from 'fs/promises';
 import { Driver } from '../entities/driver.entity';
 
 @Injectable()
-export class Database {
+export class DriversDatabase {
   private FILENAME = 'drivers.json';
 
   public async saveData(data: Driver) {
@@ -16,7 +16,9 @@ export class Database {
     return data;
   }
   public async loadData() {
-    const content = JSON.parse(await readFile(this.FILENAME, 'utf-8'));
+    const content: Driver[] = JSON.parse(
+      await readFile(this.FILENAME, 'utf-8'),
+    );
 
     return content;
   }
