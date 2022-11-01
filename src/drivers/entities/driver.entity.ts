@@ -5,6 +5,7 @@ import {
   IsDefined,
   MaxLength,
   IsEnum,
+  IsBoolean,
 } from 'class-validator';
 import { CarModel } from './car-model.enum';
 
@@ -23,7 +24,9 @@ export class Driver {
   @IsNotEmpty({
     message: 'birth date is required',
   })
-  @IsDate()
+  @IsDate({
+    message: 'birth date must be dd/mm/yyyy or dd-mm-yyyy format',
+  })
   birth_date: Date;
 
   @IsNotEmpty({
@@ -32,10 +35,18 @@ export class Driver {
   @Matches(/[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}/, {
     message: 'has to be a valid cpf',
   })
-  cpf: number;
+  cpf: string;
 
   @IsNotEmpty({
     message: 'car plate is required',
+  })
+  @Matches(/^(?=(?:.*[0-9]){3})(?=(?:.*[A-Z]){4})[A-Z0-9]{7}$/, {
+    message: `must be a valid car plate, such as: 
+  * AB123CD, 
+  * 1A2B3CD, 
+  * 123ABCD, 
+  * ABCD123
+  `,
   })
   car_plate: string;
 
@@ -51,4 +62,7 @@ export class Driver {
     * VAN `,
   })
   car_model: CarModel;
+
+  @IsBoolean({ message: 'blocked must be true or false' })
+  blocked?: boolean;
 }
