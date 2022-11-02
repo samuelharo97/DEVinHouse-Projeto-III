@@ -16,11 +16,18 @@ export class DriversService {
     driver.cpf = this.util.cleanCpf(driver.cpf);
 
     const driverExists = await this.getDriver(driver.cpf);
-
+    const plateExists = await this.getPlates(driver.car_plate);
     if (driverExists) {
       throw new ConflictException({
         statusCode: 409,
-        message: 'A driver with the same CPF already exists',
+        message: 'A driver with the same CPF is already registered',
+      });
+    }
+
+    if (plateExists) {
+      throw new ConflictException({
+        statusCode: 409,
+        message: 'A car with the same license plate is already registered',
       });
     }
 
@@ -45,12 +52,19 @@ export class DriversService {
     return drivers.find((driver) => driver.cpf == cpf);
   }
 
+  public async getPlates(license_plates: string) {
+    const drivers = await this.database.loadData();
+    return drivers.find((driver) => driver.car_plate == license_plates);
+  }
+
   public async findAll(page: number, limit: number) {
     const drivers = await this.database.loadData();
 
     if (page > 0 || limit > 0) {
       return this.util.paginate(drivers, page, limit);
     }
+
+    return drivers;
   }
 
   public async findOne(cpf: string) {

@@ -1,6 +1,5 @@
 import {
   IsNotEmpty,
-  IsDate,
   Matches,
   IsDefined,
   MaxLength,

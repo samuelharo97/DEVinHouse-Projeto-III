@@ -262,5 +262,13 @@
     "car_plate": "COV1290",
     "car_model": "SEDAN",
     "blocked": false
+  },
+  {
+    "name": "Samuel Haro",
+    "birth_date": "17/02/1990",
+    "cpf": "45433858820",
+    "car_plate": "COV1290",
+    "car_model": "SEDAN",
+    "blocked": false
   }
 ]

@@ -26,6 +26,12 @@ export class Utils {
     // calculate age comparing current date and birthday
     const myAge = ~~((Date.now() - myBirthday) / 31557600000);
 
+    if (myAge > 70) {
+      throw new BadRequestException({
+        message: `driver can't be over 70 years old`,
+      });
+    }
+
     if (myAge < 18) {
       return false;
     } else {
