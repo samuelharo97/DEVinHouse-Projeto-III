@@ -4,8 +4,10 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
+import { NestResponse } from 'src/core/http/nest-response';
 import { Utils } from 'src/utils/utils';
 import { Database } from '../db/database';
+import { BlockDriverDTo } from './dto/block-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { Driver } from './entities/driver.entity';
 
@@ -128,7 +130,7 @@ export class DriversService {
     return updatedDriver;
   }
 
-  public async remove(cpf: string) {
+  public async remove(cpf: string): Promise<NestResponse> {
     const driver = await this.getDriver(cpf);
     if (!driver) {
       throw new NotFoundException({
@@ -146,7 +148,7 @@ export class DriversService {
     return;
   }
 
-  public async block(cpf: string) {
+  public async block(cpf: string, received: boolean) {
     const driver = await this.getDriver(cpf);
     if (!driver) {
       throw new NotFoundException({
@@ -159,7 +161,7 @@ export class DriversService {
 
     const updatedDrivers = drivers.map((driver) => {
       if (driver.cpf === cpf) {
-        driver.blocked = true;
+        driver.blocked = received;
       }
       return driver;
     });
@@ -171,7 +173,7 @@ export class DriversService {
     return updatedDriver;
   }
 
-  public async unblock(cpf: string) {
+  /* public async unblock(cpf: string) {
     const driver = await this.getDriver(cpf);
     if (!driver) {
       throw new NotFoundException({
@@ -194,5 +196,5 @@ export class DriversService {
     const updatedDriver = updatedDrivers.filter((driver) => driver.cpf == cpf);
 
     return updatedDriver;
-  }
+  } */
 }

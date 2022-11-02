@@ -5,6 +5,7 @@ import {
   MaxLength,
   IsEnum,
   IsBoolean,
+  MinLength,
 } from 'class-validator';
 import { CarModel } from './car-model.enum';
 
@@ -14,6 +15,9 @@ export class Driver {
   })
   @MaxLength(50, {
     message: `name can't be longer than 50 characters`,
+  })
+  @MinLength(4, {
+    message: `name needs to have a minimum of 4 characters`,
   })
   @IsNotEmpty({
     message: 'name is required',
@@ -58,6 +62,5 @@ export class Driver {
   })
   car_model: CarModel;
 
-  @IsBoolean({ message: 'blocked must be true or false' })
   blocked?: boolean;
 }

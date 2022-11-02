@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   Matches,
   MaxLength,
+  MinLength,
 } from 'class-validator';
 import { CarModel } from '../entities/car-model.enum';
 
@@ -13,6 +14,9 @@ export class CreateDriverDto {
   })
   @MaxLength(50, {
     message: `name can't be longer than 50 characters`,
+  })
+  @MinLength(4, {
+    message: `name needs to have a minimum of 4 characters`,
   })
   @IsNotEmpty({
     message: 'name is required',
