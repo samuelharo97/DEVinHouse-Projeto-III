@@ -1,13 +1,5 @@
 [
   {
-    "name": "User 1",
-    "birth_date": "17/02/1997",
-    "cpf": "45433858881",
-    "car_plate": "COV1290",
-    "car_model": "SEDAN",
-    "blocked": false
-  },
-  {
     "name": "User 2",
     "birth_date": "17/02/1997",
     "cpf": "45433858882",
@@ -248,7 +240,7 @@
     "blocked": false
   },
   {
-    "name": "User 32",
+    "name": "Driver 32",
     "birth_date": "17/02/1997",
     "cpf": "454338588832",
     "car_plate": "COV1290",
@@ -256,18 +248,10 @@
     "blocked": false
   },
   {
-    "name": "User 33",
-    "birth_date": "17/02/1997",
-    "cpf": "454338588833",
-    "car_plate": "COV1290",
-    "car_model": "SEDAN",
-    "blocked": false
-  },
-  {
-    "name": "Samuel Haro",
+    "name": "Driver 01",
     "birth_date": "17/02/1990",
-    "cpf": "45433858820",
-    "car_plate": "COV1290",
+    "cpf": "45433858801",
+    "car_plate": "NEN6173",
     "car_model": "SEDAN",
     "blocked": false
   }

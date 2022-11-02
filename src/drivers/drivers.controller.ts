@@ -10,6 +10,7 @@ import {
   NotFoundException,
   Query,
 } from '@nestjs/common';
+import { NestResponse } from 'src/core/http/nest-response';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
 import { DriversService } from './drivers.service';
 import { CreateDriverDto } from './dto/create-driver.dto';
@@ -34,12 +35,22 @@ export class DriversController {
   }
 
   @Get()
-  public async findAll(@Query('page') page = 0, @Query('limit') limit = 0) {
-    return this.driversService.findAll(page, limit);
+  public async findAll(
+    @Query('page') page = 0,
+    @Query('limit') limit = 0,
+  ): Promise<NestResponse> {
+    const response = this.driversService.findAll(page, limit);
+    return new NestResponseBuilder()
+      .withStatus(HttpStatus.OK)
+      .withHeaders({
+        Location: `/drivers`,
+      })
+      .withBody(response)
+      .build();
   }
 
   @Get(':cpf')
-  public async findOne(@Param('cpf') cpf: string) {
+  public async findOne(@Param('cpf') cpf: string): Promise<NestResponse> {
     const driver = await this.driversService.findOne(cpf);
 
     if (!driver) {
@@ -49,27 +60,47 @@ export class DriversController {
       });
     }
 
-    return driver;
+    return new NestResponseBuilder()
+      .withStatus(HttpStatus.OK)
+      .withHeaders({
+        Location: `/drivers/${driver.cpf}`,
+      })
+      .withBody(driver)
+      .build();
   }
 
   @Patch(':cpf')
-  update(@Param('cpf') cpf: string, @Body() updateDriverDto: UpdateDriverDto) {
-    return this.driversService.update(cpf, updateDriverDto);
+  public async update(
+    @Param('cpf') cpf: string,
+    @Body() updateDriverDto: UpdateDriverDto,
+  ): Promise<NestResponse> {
+    const response = await this.driversService.update(cpf, updateDriverDto);
+    return new NestResponseBuilder()
+      .withStatus(HttpStatus.OK)
+      .withHeaders({
+        Location: `/drivers/${response.cpf}`,
+      })
+      .withBody(response)
+      .build();
   }
 
   @Delete(':cpf')
-  remove(@Param('cpf') cpf: string) {
-    return this.driversService.remove(cpf);
+  public async remove(@Param('cpf') cpf: string) {
+    this.driversService.remove(cpf);
+    return new NestResponseBuilder()
+      .withStatus(HttpStatus.OK)
+      .withBody({ message: 'Driver deleted' })
+      .build();
   }
 
   @Patch('/block/:cpf')
-  public block(@Param('cpf') cpf: string) {
+  public async block(@Param('cpf') cpf: string) {
     const driver = this.driversService.block(cpf);
 
     return driver;
   }
   @Patch('/unblock/:cpf')
-  public unblock(@Param('cpf') cpf: string) {
+  public async unblock(@Param('cpf') cpf: string) {
     const driver = this.driversService.unblock(cpf);
 
     return driver;
