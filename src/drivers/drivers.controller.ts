@@ -8,6 +8,7 @@ import {
   Delete,
   HttpStatus,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
 import { DriversService } from './drivers.service';
@@ -26,15 +27,15 @@ export class DriversController {
     return new NestResponseBuilder()
       .withStatus(HttpStatus.CREATED)
       .withHeaders({
-        Location: `/drivers/${createdDriver}`,
+        Location: `/drivers/${createdDriver.cpf}`,
       })
       .withBody(createdDriver)
       .build();
   }
 
   @Get()
-  findAll() {
-    return this.driversService.findAll();
+  public async findAll(@Query('page') page = 0, @Query('limit') limit = 0) {
+    return this.driversService.findAll(page, limit);
   }
 
   @Get(':cpf')

@@ -1,15 +1,19 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { CleanCPF } from 'src/utils/clean-cpf';
+import {
+  ConflictException,
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import { Utils } from 'src/utils/utils';
 import { DriversDatabase } from './db/database';
-import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { Driver } from './entities/driver.entity';
 
 @Injectable()
 export class DriversService {
-  constructor(private database: DriversDatabase, private cpfFix: CleanCPF) {}
+  constructor(private database: DriversDatabase, private util: Utils) {}
   public async create(driver: Driver) {
-    driver.cpf = this.cpfFix.cleanCpf(driver.cpf);
+    driver.cpf = this.util.cleanCpf(driver.cpf);
 
     const driverExists = await this.getDriver(driver.cpf);
 
@@ -17,6 +21,15 @@ export class DriversService {
       throw new ConflictException({
         statusCode: 409,
         message: 'A driver with the same CPF already exists',
+      });
+    }
+
+    const ageValidation = this.util.underAgeValidate(driver.birth_date);
+
+    if (!ageValidation) {
+      throw new BadRequestException({
+        statusCode: 400,
+        message: 'Driver must be over 18 years old',
       });
     }
 
@@ -32,9 +45,12 @@ export class DriversService {
     return drivers.find((driver) => driver.cpf == cpf);
   }
 
-  public async findAll() {
+  public async findAll(page: number, limit: number) {
     const drivers = await this.database.loadData();
-    return drivers;
+
+    if (page > 0 || limit > 0) {
+      return this.util.paginate(drivers, page, limit);
+    }
   }
 
   public async findOne(cpf: string) {
@@ -47,14 +63,50 @@ export class DriversService {
     return driver;
   }
 
-  update(cpf: string, updateDriverDto: UpdateDriverDto) {
-    return `This action updates a #${cpf} driver`;
+  public async update(cpf: string, body: UpdateDriverDto) {
+    const driverExists = await this.getDriver(cpf);
+
+    if (!driverExists) {
+      throw new NotFoundException({
+        statusCode: 404,
+        message: 'driver not found',
+      });
+    }
+
+    const drivers = await this.database.loadData();
+
+    const updatedDrivers = drivers.map((driver) => {
+      if (driver.cpf === cpf) {
+        driver.name = body.name || driver.name;
+        driver.birth_date = body.birth_date || driver.birth_date;
+        driver.car_plate = body.car_plate || driver.car_plate;
+        driver.car_model = body.car_model || driver.car_model;
+        driver.blocked = body.blocked || driver.blocked;
+      }
+      return driver;
+    });
+
+    await this.database.rewriteData(updatedDrivers);
+
+    const updatedDriver = await this.getDriver(cpf);
+
+    return updatedDriver;
   }
 
   public async remove(cpf: string) {
+    const driver = await this.getDriver(cpf);
+    if (!driver) {
+      throw new NotFoundException({
+        statusCode: 404,
+        message: 'driver not found',
+      });
+    }
+
     const drivers = await this.database.loadData();
 
-    const updatedList = drivers.filter((driver) => driver.cpf == cpf);
+    const updatedList = drivers.filter((driver) => driver.cpf !== cpf);
+
+    this.database.rewriteData(updatedList);
 
     return;
   }
@@ -62,7 +114,7 @@ export class DriversService {
   public async block(cpf: string) {
     const driver = await this.getDriver(cpf);
     if (!driver) {
-      throw new ConflictException({
+      throw new NotFoundException({
         statusCode: 404,
         message: 'driver not found',
       });
@@ -87,7 +139,7 @@ export class DriversService {
   public async unblock(cpf: string) {
     const driver = await this.getDriver(cpf);
     if (!driver) {
-      throw new ConflictException({
+      throw new NotFoundException({
         statusCode: 404,
         message: 'driver not found',
       });
