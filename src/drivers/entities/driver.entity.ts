@@ -41,12 +41,7 @@ export class Driver {
     message: 'car plate is required',
   })
   @Matches(/^(?=(?:.*[0-9]){3})(?=(?:.*[A-Z]){4})[A-Z0-9]{7}$/, {
-    message: `must be a valid car plate, such as: 
-  * AB123CD, 
-  * 1A2B3CD, 
-  * 123ABCD, 
-  * ABCD123
-  `,
+    message: `must be a valid car plate with no hyphens (-) , such as: MZW4550, MYF8104, IAO4372, ADC9313`,
   })
   car_plate: string;
 

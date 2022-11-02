@@ -38,8 +38,9 @@ export class DriversController {
   public async findAll(
     @Query('page') page = 0,
     @Query('limit') limit = 0,
+    @Query('name') name: string,
   ): Promise<NestResponse> {
-    const response = this.driversService.findAll(page, limit);
+    const response = this.driversService.findAll(page, limit, name);
     return new NestResponseBuilder()
       .withStatus(HttpStatus.OK)
       .withHeaders({

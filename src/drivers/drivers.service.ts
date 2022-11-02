@@ -14,6 +14,17 @@ export class DriversService {
   constructor(private database: Database, private util: Utils) {}
   public async create(driver: Driver) {
     driver.cpf = this.util.cleanCpf(driver.cpf);
+    driver.car_plate = this.util.cleanLicensePlates(driver.car_plate);
+    const cpfIsValid = this.util.validateCPF(driver.cpf);
+
+    if (!cpfIsValid) {
+      throw new BadRequestException({
+        statusCode: 400,
+        message: 'Invalid CPF',
+      });
+    }
+
+    console.log(cpfIsValid);
 
     const driverExists = await this.getDriver(driver.cpf);
     const plateExists = await this.getPlates(driver.car_plate);
@@ -42,29 +53,33 @@ export class DriversService {
 
     driver.blocked = driver.blocked || false;
 
-    this.database.saveData(driver, this.database.DRIVERS_FILENAME);
+    this.database.saveData(driver, this.database.DRIVERS_FILE);
 
     return driver;
   }
 
   public async getDriver(cpf: string) {
-    const drivers = await this.database.loadData(
-      this.database.DRIVERS_FILENAME,
-    );
+    const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
     return drivers.find((driver) => driver.cpf == cpf);
   }
 
   public async getPlates(license_plates: string) {
-    const drivers = await this.database.loadData(
-      this.database.DRIVERS_FILENAME,
-    );
+    const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
     return drivers.find((driver) => driver.car_plate == license_plates);
   }
 
-  public async findAll(page: number, limit: number): Promise<Driver[]> {
-    const drivers = await this.database.loadData(
-      this.database.DRIVERS_FILENAME,
-    );
+  public async findAll(
+    page: number,
+    limit: number,
+    name: string,
+  ): Promise<Driver[]> {
+    let drivers = await this.database.loadData(this.database.DRIVERS_FILE);
+
+    if (name) {
+      drivers = drivers.filter((driver) =>
+        driver.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()),
+      );
+    }
 
     if (page > 0 || limit > 0) {
       return this.util.paginate(drivers, page, limit);
@@ -74,9 +89,7 @@ export class DriversService {
   }
 
   public async findOne(cpf: string): Promise<Driver> {
-    const drivers = await this.database.loadData(
-      this.database.DRIVERS_FILENAME,
-    );
+    const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
 
     const driver = drivers.find((driver: Driver) => {
       return driver.cpf == cpf;
@@ -95,9 +108,7 @@ export class DriversService {
       });
     }
 
-    const drivers = await this.database.loadData(
-      this.database.DRIVERS_FILENAME,
-    );
+    const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
 
     const updatedDrivers = drivers.map((driver) => {
       if (driver.cpf === cpf) {
@@ -110,10 +121,7 @@ export class DriversService {
       return driver;
     });
 
-    await this.database.rewriteData(
-      updatedDrivers,
-      this.database.DRIVERS_FILENAME,
-    );
+    await this.database.rewriteData(updatedDrivers, this.database.DRIVERS_FILE);
 
     const updatedDriver = await this.getDriver(cpf);
 
@@ -129,13 +137,11 @@ export class DriversService {
       });
     }
 
-    const drivers = await this.database.loadData(
-      this.database.DRIVERS_FILENAME,
-    );
+    const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
 
     const updatedList = drivers.filter((driver) => driver.cpf !== cpf);
 
-    this.database.rewriteData(updatedList, this.database.DRIVERS_FILENAME);
+    this.database.rewriteData(updatedList, this.database.DRIVERS_FILE);
 
     return;
   }
@@ -149,9 +155,7 @@ export class DriversService {
       });
     }
 
-    const drivers = await this.database.loadData(
-      this.database.DRIVERS_FILENAME,
-    );
+    const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
 
     const updatedDrivers = drivers.map((driver) => {
       if (driver.cpf === cpf) {
@@ -160,7 +164,7 @@ export class DriversService {
       return driver;
     });
 
-    this.database.rewriteData(updatedDrivers, this.database.DRIVERS_FILENAME);
+    this.database.rewriteData(updatedDrivers, this.database.DRIVERS_FILE);
 
     const updatedDriver = updatedDrivers.filter((driver) => driver.cpf == cpf);
 
@@ -176,9 +180,7 @@ export class DriversService {
       });
     }
 
-    const drivers = await this.database.loadData(
-      this.database.DRIVERS_FILENAME,
-    );
+    const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
 
     const updatedDrivers = drivers.map((driver) => {
       if (driver.cpf === cpf) {
@@ -187,7 +189,7 @@ export class DriversService {
       return driver;
     });
 
-    this.database.rewriteData(updatedDrivers, this.database.DRIVERS_FILENAME);
+    this.database.rewriteData(updatedDrivers, this.database.DRIVERS_FILE);
 
     const updatedDriver = updatedDrivers.filter((driver) => driver.cpf == cpf);
 
