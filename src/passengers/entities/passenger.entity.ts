@@ -7,7 +7,9 @@ import {
   IsString,
   IsNumber,
   Length,
+  ValidateNested,
 } from 'class-validator';
+import { address } from './passenger-address';
 
 export class Passenger {
   @MaxLength(50, {
@@ -38,24 +40,9 @@ export class Passenger {
   })
   cpf: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(15)
-  state: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(30)
-  city: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(50)
-  street: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  number: string;
+  @ValidateNested()
+  @IsObject()
+  address: address;
 
   blocked?: boolean;
 }

@@ -113,10 +113,12 @@ export class PassengerService {
         passenger.name = body.name || passenger.name;
         passenger.birth_date = body.birth_date || passenger.birth_date;
         passenger.blocked = body.blocked || passenger.blocked;
-        passenger.city = body.city || passenger.city;
-        passenger.state = body.state || passenger.state;
-        passenger.number = body.number || passenger.number;
-        passenger.street = body.street || passenger.street;
+        passenger.address.city = body.address.city || passenger.address.city;
+        passenger.address.state = body.address.state || passenger.address.state;
+        passenger.address.number =
+          body.address.number || passenger.address.number;
+        passenger.address.street =
+          body.address.street || passenger.address.street;
       }
       return passenger;
     });

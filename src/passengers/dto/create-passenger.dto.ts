@@ -6,7 +6,10 @@ import {
   Length,
   IsNumber,
   IsString,
+  ValidateNested,
+  IsObject,
 } from 'class-validator';
+import { address } from '../entities/passenger-address';
 
 export class CreatePassengerDto {
   @MaxLength(50, {
@@ -37,24 +40,9 @@ export class CreatePassengerDto {
   })
   cpf: string;
 
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(15)
-  state: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(30)
-  city: string;
-
-  @IsNotEmpty()
-  @IsString()
-  @MaxLength(50)
-  street: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  number: string;
+  @ValidateNested()
+  @IsObject()
+  address: address;
 
   blocked?: boolean;
 }

@@ -3,50 +3,72 @@
     "name": "Passenger 1",
     "birth_date": "17/02/1997",
     "cpf": "05229143061",
-    "state": "RR",
-    "city": "Boa Vista",
-    "street": "Santa Rita",
-    "number": 5224,
+    "address": {
+      "state": "RR",
+      "city": "Boa Vista",
+      "street": "Santa Rita",
+      "number": 521
+    },
     "blocked": false
   },
   {
     "name": "Passenger 2",
     "birth_date": "17/02/1997",
     "cpf": "56251748060",
-    "state": "RR",
-    "city": "Boa Vista",
-    "street": "Santa Rita",
-    "number": 2345,
+    "address": {
+      "state": "RR",
+      "city": "Boa Vista",
+      "street": "Santa Rita",
+      "number": 522
+    },
     "blocked": false
   },
   {
     "name": "Passenger 3",
     "birth_date": "17/02/1997",
     "cpf": "23586470045",
-    "state": "RR",
-    "city": "Boa Vista",
-    "street": "Santa Rita",
-    "number": 24,
+    "address": {
+      "state": "RR",
+      "city": "Boa Vista",
+      "street": "Santa Rita",
+      "number": 529
+    },
     "blocked": false
   },
   {
     "name": "Passenger 4",
     "birth_date": "17/02/1997",
     "cpf": "54402524016",
-    "state": "RR",
-    "city": "Boa Vista",
-    "street": "Santa Rita",
-    "number": 745,
+    "address": {
+      "state": "RR",
+      "city": "Boa Vista",
+      "street": "Santa Rita",
+      "number": 514
+    },
     "blocked": false
   },
   {
     "name": "Passenger 5",
     "birth_date": "17/02/1997",
     "cpf": "25683725089",
-    "state": "RR",
-    "city": "Boa Vista",
-    "street": "Santa Rita",
-    "number": 1245,
+    "address": {
+      "state": "RR",
+      "city": "Boa Vista",
+      "street": "Santa Rita",
+      "number": 544
+    },
     "blocked": true
+  },
+  {
+    "name": "Passenger 6",
+    "birth_date": "17/02/1997",
+    "cpf": "10366809083",
+    "address": {
+      "state": "RR",
+      "city": "Boa Vista",
+      "street": "Santa Rita",
+      "number": 554
+    },
+    "blocked": false
   }
 ]

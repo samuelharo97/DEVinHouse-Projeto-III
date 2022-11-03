@@ -1,10 +1,10 @@
 import { TRIP_STATUS } from './trip.enum';
-import { IsNotEmpty, IsUUID, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsUUID, IsEnum, IsDate } from 'class-validator';
 
 export class Trip {
   @IsNotEmpty()
   @IsUUID(4)
-  trip_id: string;
+  trip_id?: string;
 
   @IsNotEmpty()
   passenger_id: string;
@@ -17,5 +17,9 @@ export class Trip {
 
   @IsEnum(TRIP_STATUS)
   @IsNotEmpty()
-  trip_status: TRIP_STATUS;
+  trip_status?: TRIP_STATUS;
+
+  @IsNotEmpty()
+  @IsDate()
+  created_at?: string;
 }
