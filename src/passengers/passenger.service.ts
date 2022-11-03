@@ -14,9 +14,9 @@ import { Passenger } from './entities/passenger.entity';
 export class PassengerService {
   constructor(private database: Database, private util: Utils) {}
 
-  public async create(passanger: Passenger) {
-    passanger.cpf = this.util.cleanCpf(passanger.cpf);
-    const cpfIsValid = this.util.validateCPF(passanger.cpf);
+  public async create(passenger: Passenger) {
+    passenger.cpf = this.util.cleanCpf(passenger.cpf);
+    const cpfIsValid = this.util.validateCPF(passenger.cpf);
 
     if (!cpfIsValid) {
       throw new BadRequestException({
@@ -25,7 +25,7 @@ export class PassengerService {
       });
     }
 
-    const passengerExists = await this.getPassenger(passanger.cpf);
+    const passengerExists = await this.getPassenger(passenger.cpf);
     if (passengerExists) {
       throw new ConflictException({
         statusCode: 409,
@@ -33,7 +33,7 @@ export class PassengerService {
       });
     }
 
-    const ageValidation = this.util.underAgeValidate(passanger.birth_date);
+    const ageValidation = this.util.underAgeValidate(passenger.birth_date);
 
     if (!ageValidation) {
       throw new BadRequestException({
@@ -42,9 +42,11 @@ export class PassengerService {
       });
     }
 
-    this.database.saveData(passanger, this.database.PASSENGERS_FILE);
+    passenger.blocked = passenger.blocked || false;
 
-    return passanger;
+    this.database.saveData(passenger, this.database.PASSENGERS_FILE);
+
+    return passenger;
   }
 
   public async getPassenger(cpf: string): Promise<Passenger> {

@@ -70,7 +70,7 @@ export class DriversService {
 
   public async findAll(
     page: number,
-    limit: number,
+    size: number,
     name: string,
   ): Promise<Driver[]> {
     let drivers = await this.database.loadData(this.database.DRIVERS_FILE);
@@ -81,8 +81,8 @@ export class DriversService {
       );
     }
 
-    if (page > 0 || limit > 0) {
-      return this.util.paginate(drivers, page, limit);
+    if (page > 0 || size > 0) {
+      return this.util.paginate(drivers, page, size);
     }
 
     return drivers;

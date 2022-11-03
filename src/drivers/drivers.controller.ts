@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   HttpStatus,
-  NotFoundException,
   Query,
   Put,
 } from '@nestjs/common';
@@ -38,10 +37,10 @@ export class DriversController {
   @Get()
   public async findAll(
     @Query('page') page = 0,
-    @Query('limit') limit = 0,
+    @Query('size') size = 0,
     @Query('name') name: string,
   ): Promise<NestResponse> {
-    const response = this.driversService.findAll(page, limit, name);
+    const response = this.driversService.findAll(page, size, name);
     return new NestResponseBuilder()
       .withStatus(HttpStatus.OK)
       .withHeaders({
@@ -83,7 +82,7 @@ export class DriversController {
   public async remove(@Param('cpf') cpf: string): Promise<NestResponse> {
     await this.driversService.remove(cpf);
     return new NestResponseBuilder()
-      .withStatus(HttpStatus.NO_CONTENT)
+      .withStatus(HttpStatus.OK)
       .withHeaders({
         Location: `/drivers/block/${cpf}`,
       })
