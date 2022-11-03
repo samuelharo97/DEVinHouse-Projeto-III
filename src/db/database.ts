@@ -20,12 +20,12 @@ export class Database {
     return data;
   }
   public async loadData(fileName: string) {
-    const content: Driver[] = JSON.parse(await readFile(fileName, 'utf-8'));
+    const content: any[] = JSON.parse(await readFile(fileName, 'utf-8'));
 
     return content;
   }
 
-  public async rewriteData(data: Driver[] | User[] | Trip[], fileName: string) {
+  public async rewriteData(data: any[], fileName: string) {
     await writeFile(fileName, JSON.stringify(data));
   }
 }

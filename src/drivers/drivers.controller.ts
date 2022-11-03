@@ -14,7 +14,6 @@ import {
 import { NestResponse } from 'src/core/http/nest-response';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
 import { DriversService } from './drivers.service';
-import { BlockDriverDTo } from './dto/block-driver.dto';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 
@@ -23,16 +22,15 @@ export class DriversController {
   constructor(private readonly driversService: DriversService) {}
 
   @Post()
-  public async create(@Body() driver: CreateDriverDto) {
-    driver.blocked = driver.blocked || false;
-    const createdDriver = await this.driversService.create(driver);
+  public async create(@Body() body: CreateDriverDto) {
+    const driver = await this.driversService.create(body);
 
     return new NestResponseBuilder()
       .withStatus(HttpStatus.CREATED)
       .withHeaders({
-        Location: `/drivers/${createdDriver.cpf}`,
+        Location: `/drivers/${body.cpf}`,
       })
-      .withBody(createdDriver)
+      .withBody({ driver })
       .build();
   }
 
@@ -77,35 +75,38 @@ export class DriversController {
     @Param('cpf') cpf: string,
     @Body() updateDriverDto: UpdateDriverDto,
   ): Promise<NestResponse> {
-    const response = await this.driversService.update(cpf, updateDriverDto);
+    const driver = await this.driversService.update(cpf, updateDriverDto);
     return new NestResponseBuilder()
       .withStatus(HttpStatus.OK)
       .withHeaders({
-        Location: `/drivers/${response.cpf}`,
+        Location: `/drivers/${driver.cpf}`,
       })
-      .withBody(response)
+      .withBody(driver)
       .build();
   }
 
   @Delete(':cpf')
-  public async remove(@Param('cpf') cpf: string) {
-    this.driversService.remove(cpf);
+  public async remove(@Param('cpf') cpf: string): Promise<NestResponse> {
+    await this.driversService.remove(cpf);
     return new NestResponseBuilder()
       .withStatus(HttpStatus.OK)
-      .withBody({ message: 'Driver deleted' })
+      .withHeaders({
+        Location: `/drivers/block/${cpf}`,
+      })
+      .withBody({ message: `driver deleted` })
       .build();
   }
 
   @Patch('/block/:cpf')
-  public async block(@Param('cpf') cpf: string, @Body() blocked: boolean) {
-    const driver = this.driversService.block(cpf, blocked);
+  public async block(@Param('cpf') cpf: string, @Body() body: UpdateDriverDto) {
+    const driver = await this.driversService.block(cpf, body);
 
-    return driver;
+    return new NestResponseBuilder()
+      .withStatus(HttpStatus.ACCEPTED)
+      .withHeaders({
+        Location: `/drivers/block/${cpf}`,
+      })
+      .withBody({ driver })
+      .build();
   }
-  /* @Patch('/unblock/:cpf')
-  public async unblock(@Param('cpf') cpf: string) {
-    const driver = this.driversService.unblock(cpf);
-
-    return driver;
-  } */
 }

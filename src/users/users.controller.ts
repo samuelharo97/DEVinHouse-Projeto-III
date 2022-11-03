@@ -3,14 +3,18 @@ import {
   Get,
   Post,
   Body,
-  Put,
+  Patch,
   Param,
   Delete,
+  HttpStatus,
+  NotFoundException,
+  Query,
+  Put,
 } from '@nestjs/common';
+import { NestResponse } from 'src/core/http/nest-response';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { HttpStatus } from '@nestjs/common';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
 
 @Controller('users')
@@ -31,8 +35,19 @@ export class UsersController {
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  public async findAll(
+    @Query('page') page = 0,
+    @Query('limit') limit = 0,
+    @Query('name') name: string,
+  ): Promise<NestResponse> {
+    const users = this.usersService.findAll(page, limit, name);
+    return new NestResponseBuilder()
+      .withStatus(HttpStatus.OK)
+      .withHeaders({
+        Location: `/users`,
+      })
+      .withBody(users)
+      .build();
   }
 
   @Get(':cpf')

@@ -4,10 +4,8 @@ import {
   BadRequestException,
   NotFoundException,
 } from '@nestjs/common';
-import { NestResponse } from 'src/core/http/nest-response';
 import { Utils } from 'src/utils/utils';
 import { Database } from '../db/database';
-import { BlockDriverDTo } from './dto/block-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { Driver } from './entities/driver.entity';
 
@@ -25,8 +23,6 @@ export class DriversService {
         message: 'Invalid CPF',
       });
     }
-
-    console.log(cpfIsValid);
 
     const driverExists = await this.getDriver(driver.cpf);
     const plateExists = await this.getPlates(driver.car_plate);
@@ -130,8 +126,9 @@ export class DriversService {
     return updatedDriver;
   }
 
-  public async remove(cpf: string): Promise<NestResponse> {
+  public async remove(cpf: string) {
     const driver = await this.getDriver(cpf);
+
     if (!driver) {
       throw new NotFoundException({
         statusCode: 404,
@@ -144,12 +141,11 @@ export class DriversService {
     const updatedList = drivers.filter((driver) => driver.cpf !== cpf);
 
     this.database.rewriteData(updatedList, this.database.DRIVERS_FILE);
-
-    return;
   }
 
-  public async block(cpf: string, received: boolean) {
+  public async block(cpf: string, body: UpdateDriverDto): Promise<Driver[]> {
     const driver = await this.getDriver(cpf);
+
     if (!driver) {
       throw new NotFoundException({
         statusCode: 404,
@@ -161,7 +157,7 @@ export class DriversService {
 
     const updatedDrivers = drivers.map((driver) => {
       if (driver.cpf === cpf) {
-        driver.blocked = received;
+        driver.blocked = body.blocked;
       }
       return driver;
     });

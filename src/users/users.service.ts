@@ -47,12 +47,34 @@ export class UsersService {
     return user;
   }
 
-  findAll() {
-    return `This action returns all users`;
+  public async findAll(
+    page: number,
+    limit: number,
+    name: string,
+  ): Promise<User[]> {
+    let users: User[] = await this.database.loadData(this.database.USERS_FILE);
+
+    if (name) {
+      users = users.filter((user) =>
+        user.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()),
+      );
+    }
+
+    if (page > 0 || limit > 0) {
+      return this.util.paginate(users, page, limit);
+    }
+
+    return users;
   }
 
-  findOne(cpf: string) {
-    return `This action returns a #${cpf} user`;
+  public async findOne(cpf: string) {
+    const users = await this.database.loadData(this.database.USERS_FILE);
+
+    const user = users.find((user: User) => {
+      return user.cpf == cpf;
+    });
+
+    return user;
   }
 
   update(cpf: string, updateUserDto: UpdateUserDto) {

@@ -53,12 +53,7 @@ export class Driver {
     message: 'car model is required',
   })
   @IsEnum(CarModel, {
-    message: `Car has to be one of the following models: 
-    * SEDAN 
-    * HATCHBACK 
-    * SUV 
-    * PICKUP 
-    * VAN `,
+    message: `Car has to be one of the following models: SEDAN, HATCHBACK, SUV, PICKUP, VAN `,
   })
   car_model: CarModel;
 
