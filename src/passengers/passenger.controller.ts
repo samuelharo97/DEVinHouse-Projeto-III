@@ -22,7 +22,9 @@ export class PassengerController {
   constructor(private readonly passengersService: PassengerService) {}
 
   @Post()
-  public async create(@Body() passenger: CreatePassengerDto) {
+  public async create(
+    @Body() passenger: CreatePassengerDto,
+  ): Promise<NestResponse> {
     const createdPassenger = await this.passengersService.create(passenger);
 
     return new NestResponseBuilder()
@@ -51,7 +53,7 @@ export class PassengerController {
   }
 
   @Get(':cpf')
-  public async findOne(@Param('cpf') cpf: string) {
+  public async findOne(@Param('cpf') cpf: string): Promise<NestResponse> {
     const passenger = await this.passengersService.findOne(cpf);
 
     return new NestResponseBuilder()
@@ -85,7 +87,7 @@ export class PassengerController {
   public async remove(@Param('cpf') cpf: string): Promise<NestResponse> {
     await this.passengersService.remove(cpf);
     return new NestResponseBuilder()
-      .withStatus(HttpStatus.NO_CONTENT)
+      .withStatus(HttpStatus.ACCEPTED)
       .withHeaders({
         Location: `/passengers/block/${cpf}`,
       })

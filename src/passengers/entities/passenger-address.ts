@@ -1,15 +1,6 @@
-import {
-  IsNotEmpty,
-  Matches,
-  MaxLength,
-  IsObject,
-  MinLength,
-  IsString,
-  IsNumber,
-  Length,
-} from 'class-validator';
+import { IsNotEmpty, MaxLength, IsString, IsNumber } from 'class-validator';
 
-export class address {
+export class Address {
   @IsNotEmpty()
   @IsString()
   @MaxLength(15)

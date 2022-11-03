@@ -1,15 +1,14 @@
+import { Type } from 'class-transformer';
 import {
   IsNotEmpty,
   Matches,
   MaxLength,
   IsObject,
   MinLength,
-  IsString,
-  IsNumber,
-  Length,
   ValidateNested,
+  IsNotEmptyObject,
 } from 'class-validator';
-import { address } from './passenger-address';
+import { Address } from './passenger-address';
 
 export class Passenger {
   @MaxLength(50, {
@@ -40,9 +39,11 @@ export class Passenger {
   })
   cpf: string;
 
-  @ValidateNested()
+  @ValidateNested({ each: true })
   @IsObject()
-  address: address;
+  @IsNotEmptyObject()
+  @Type(() => Address)
+  address: Address;
 
   blocked?: boolean;
 }
