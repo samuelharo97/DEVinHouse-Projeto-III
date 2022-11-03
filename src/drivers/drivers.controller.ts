@@ -14,6 +14,7 @@ import {
 import { NestResponse } from 'src/core/http/nest-response';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
 import { DriversService } from './drivers.service';
+import { BlockDriverDTO } from './dto/block-driver.dto';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 
@@ -54,13 +55,6 @@ export class DriversController {
   public async findOne(@Param('cpf') cpf: string): Promise<NestResponse> {
     const driver = await this.driversService.findOne(cpf);
 
-    if (!driver) {
-      throw new NotFoundException({
-        statusCode: 404,
-        message: 'Driver not found',
-      });
-    }
-
     return new NestResponseBuilder()
       .withStatus(HttpStatus.OK)
       .withHeaders({
@@ -73,9 +67,9 @@ export class DriversController {
   @Put(':cpf')
   public async update(
     @Param('cpf') cpf: string,
-    @Body() updateDriverDto: UpdateDriverDto,
+    @Body() body: UpdateDriverDto,
   ): Promise<NestResponse> {
-    const driver = await this.driversService.update(cpf, updateDriverDto);
+    const driver = await this.driversService.update(cpf, body);
     return new NestResponseBuilder()
       .withStatus(HttpStatus.OK)
       .withHeaders({
@@ -89,7 +83,7 @@ export class DriversController {
   public async remove(@Param('cpf') cpf: string): Promise<NestResponse> {
     await this.driversService.remove(cpf);
     return new NestResponseBuilder()
-      .withStatus(HttpStatus.OK)
+      .withStatus(HttpStatus.NO_CONTENT)
       .withHeaders({
         Location: `/drivers/block/${cpf}`,
       })
@@ -98,15 +92,15 @@ export class DriversController {
   }
 
   @Patch('/block/:cpf')
-  public async block(@Param('cpf') cpf: string, @Body() body: UpdateDriverDto) {
+  public async block(@Param('cpf') cpf: string, @Body() body: BlockDriverDTO) {
     const driver = await this.driversService.block(cpf, body);
 
     return new NestResponseBuilder()
-      .withStatus(HttpStatus.ACCEPTED)
+      .withStatus(HttpStatus.OK)
       .withHeaders({
         Location: `/drivers/block/${cpf}`,
       })
-      .withBody({ driver })
+      .withBody(driver)
       .build();
   }
 }

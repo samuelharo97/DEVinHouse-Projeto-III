@@ -60,9 +60,9 @@ export class Utils {
     // calculate age comparing current date and birthday
     const myAge = ~~((Date.now() - myBirthday) / 31557600000);
 
-    if (myAge > 70) {
+    if (myAge > 80) {
       throw new BadRequestException({
-        message: `driver can't be over 70 years old`,
+        message: `driver can't be over 80 years old`,
       });
     }
 
@@ -73,7 +73,7 @@ export class Utils {
     }
   }
 
-  public cleanLicensePlates(licensePlate) {
+  public cleanLicensePlates(licensePlate: string) {
     const car_plate = licensePlate.replace('-', '');
     return car_plate;
   }

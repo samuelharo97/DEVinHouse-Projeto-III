@@ -2,11 +2,13 @@ import {
   IsNotEmpty,
   Matches,
   MaxLength,
-  IsObject,
   MinLength,
+  Length,
+  IsNumber,
+  IsString,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class CreatePassengerDto {
   @MaxLength(50, {
     message: `name can't be longer than 50 characters`,
   })
@@ -35,11 +37,24 @@ export class CreateUserDto {
   })
   cpf: string;
 
-  @IsObject()
-  address: {
-    state: string;
-    city: string;
-    street: string;
-    number: number;
-  };
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(15)
+  state: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(30)
+  city: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(50)
+  street: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  number: string;
+
+  blocked?: boolean;
 }

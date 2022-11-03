@@ -3,6 +3,7 @@ import {
   IsDefined,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
   Matches,
   MaxLength,
   MinLength,
@@ -58,5 +59,7 @@ export class CreateDriverDto {
   })
   car_model: CarModel;
 
+  @IsOptional()
+  @IsBoolean()
   blocked?: boolean;
 }

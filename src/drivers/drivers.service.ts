@@ -6,6 +6,8 @@ import {
 } from '@nestjs/common';
 import { Utils } from 'src/utils/utils';
 import { Database } from '../db/database';
+import { BlockDriverDTO } from './dto/block-driver.dto';
+import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { Driver } from './entities/driver.entity';
 
@@ -87,11 +89,14 @@ export class DriversService {
   }
 
   public async findOne(cpf: string): Promise<Driver> {
-    const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
+    const driver = await this.getDriver(cpf);
 
-    const driver = drivers.find((driver: Driver) => {
-      return driver.cpf == cpf;
-    });
+    if (!driver) {
+      throw new NotFoundException({
+        statusCode: 404,
+        message: 'Driver not found',
+      });
+    }
 
     return driver;
   }
@@ -143,7 +148,7 @@ export class DriversService {
     this.database.rewriteData(updatedList, this.database.DRIVERS_FILE);
   }
 
-  public async block(cpf: string, body: UpdateDriverDto): Promise<Driver[]> {
+  public async block(cpf: string, body: BlockDriverDTO): Promise<Driver[]> {
     const driver = await this.getDriver(cpf);
 
     if (!driver) {
