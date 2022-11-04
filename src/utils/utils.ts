@@ -44,16 +44,16 @@ export class Utils {
   }
 
   public underAgeValidate(birthday: string) {
-    const year = birthday.slice(6, birthday.length);
+    /* const year = birthday.slice(6, birthday.length);
     const month = birthday.slice(3, 5);
     const day = birthday.slice(0, 2);
 
-    const formatedBirthday = year + '/' + month + '/' + day;
+    const formatedBirthday = year + '/' + month + '/' + day; */
 
     // script below taken from: https://www.good-codes.com/javascript-calculate-age-from-date-of-birth-js/
 
     // it will accept two types of format yyyy-mm-dd and yyyy/mm/dd
-    const optimizedBirthday = formatedBirthday.replace(/-/g, '/');
+    const optimizedBirthday = birthday.replace(/-/g, '/');
     //set date based on birthday at 01:00:00 hours GMT+0100 (CET)
     const myBirthday = Number(new Date(optimizedBirthday));
 

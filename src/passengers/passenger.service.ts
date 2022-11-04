@@ -33,7 +33,9 @@ export class PassengerService {
       });
     }
 
-    const ageValidation = this.util.underAgeValidate(passenger.birth_date);
+    const ageValidation = this.util.underAgeValidate(
+      passenger.birth_date.toString(),
+    );
 
     if (!ageValidation) {
       throw new BadRequestException({
@@ -115,8 +117,6 @@ export class PassengerService {
         passenger.blocked = body.blocked || passenger.blocked;
         passenger.address.city = body.address.city || passenger.address.city;
         passenger.address.state = body.address.state || passenger.address.state;
-        passenger.address.number =
-          body.address.number || passenger.address.number;
         passenger.address.street =
           body.address.street || passenger.address.street;
       }

@@ -1,5 +1,15 @@
 import { TRIP_STATUS } from './trip.enum';
-import { IsNotEmpty, IsUUID, IsEnum, IsDate } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsUUID,
+  IsEnum,
+  IsDate,
+  IsNotEmptyObject,
+  IsObject,
+  ValidateNested,
+} from 'class-validator';
+import { Address } from './trip-address';
+import { Type } from 'class-transformer';
 
 export class Trip {
   @IsNotEmpty()
@@ -7,13 +17,19 @@ export class Trip {
   trip_id?: string;
 
   @IsNotEmpty()
-  passenger_id: string;
+  passenger_id?: string;
 
-  @IsNotEmpty()
-  starting_from: string;
+  @ValidateNested({ each: true })
+  @IsObject()
+  @IsNotEmptyObject()
+  @Type(() => Address)
+  starting_from?: Address;
 
-  @IsNotEmpty()
-  final_destination: string;
+  @ValidateNested({ each: true })
+  @IsObject()
+  @IsNotEmptyObject()
+  @Type(() => Address)
+  final_destination: Address;
 
   @IsEnum(TRIP_STATUS)
   @IsNotEmpty()

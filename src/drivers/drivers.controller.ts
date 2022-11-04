@@ -10,6 +10,7 @@ import {
   Query,
   Put,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestResponse } from 'src/core/http/nest-response';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
 import { DriversService } from './drivers.service';
@@ -19,7 +20,10 @@ import { UpdateDriverDto } from './dto/update-driver.dto';
 
 @Controller('drivers')
 export class DriversController {
-  constructor(private readonly driversService: DriversService) {}
+  constructor(
+    private readonly driversService: DriversService,
+    private config: ConfigService,
+  ) {}
 
   @Post()
   public async create(@Body() body: CreateDriverDto) {

@@ -42,7 +42,9 @@ export class DriversService {
       });
     }
 
-    const ageValidation = this.util.underAgeValidate(driver.birth_date);
+    const ageValidation = this.util.underAgeValidate(
+      driver.birth_date.toString(),
+    );
 
     if (!ageValidation) {
       throw new BadRequestException({

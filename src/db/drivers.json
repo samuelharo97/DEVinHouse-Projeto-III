@@ -1,1 +1,439 @@
-[{"name":"User 1","birth_date":"17/02/1997","cpf":"45761953013","car_plate":"MZG9638","car_model":"SEDAN","blocked":false},{"name":"User 2","birth_date":"17/02/1997","cpf":"06711655001","car_plate":"KAL3944","car_model":"SEDAN","blocked":false},{"name":"User 3","birth_date":"17/02/1997","cpf":"73591103004","car_plate":"IKZ4547","car_model":"SEDAN","blocked":false},{"name":"User 4","birth_date":"17/02/1997","cpf":"14630782001","car_plate":"JIN3438","car_model":"SEDAN","blocked":false},{"name":"User 5","birth_date":"17/02/1997","cpf":"66874995057","car_plate":"MYJ5282","car_model":"SEDAN","blocked":false},{"name":"User 6","birth_date":"17/02/1997","cpf":"16752170096","car_plate":"KAW9324","car_model":"SEDAN","blocked":false},{"name":"User 7","birth_date":"17/02/1997","cpf":"10031207090","car_plate":"MVO7550","car_model":"SEDAN","blocked":false},{"name":"User 8","birth_date":"17/02/1997","cpf":"64296789031","car_plate":"KYB1026","car_model":"SEDAN","blocked":false},{"name":"User 9","birth_date":"17/02/1997","cpf":"77163334028","car_plate":"KAP7360","car_model":"SEDAN","blocked":false},{"name":"User 10","birth_date":"17/02/1997","cpf":"40119022095","car_plate":"KDT5711","car_model":"SEDAN","blocked":false},{"name":"User 11","birth_date":"17/02/1997","cpf":"32019897032","car_plate":"HLQ8450","car_model":"SEDAN","blocked":false},{"name":"User 12","birth_date":"17/02/1997","cpf":"52160472042","car_plate":"NET0066","car_model":"SEDAN","blocked":false},{"name":"User 13","birth_date":"17/02/1997","cpf":"06230238063","car_plate":"MWJ0025","car_model":"SEDAN","blocked":false},{"name":"User 14","birth_date":"17/02/1997","cpf":"61424994004","car_plate":"MXD0092","car_model":"SEDAN","blocked":false},{"name":"User 15","birth_date":"17/02/1997","cpf":"27411540072","car_plate":"LEO8064","car_model":"SEDAN","blocked":false},{"name":"User 16","birth_date":"17/02/1997","cpf":"41984425099","car_plate":"MVY5355","car_model":"SEDAN","blocked":false},{"name":"User 17","birth_date":"17/02/1997","cpf":"41964113040","car_plate":"HWG4167","car_model":"SEDAN","blocked":false},{"name":"User 18","birth_date":"17/02/1997","cpf":"26405252043","car_plate":"KAR1080","car_model":"SEDAN","blocked":false},{"name":"User 19","birth_date":"17/02/1997","cpf":"77998516003","car_plate":"GDL3128","car_model":"SEDAN","blocked":false},{"name":"User 20","birth_date":"17/02/1997","cpf":"48166087022","car_plate":"MWA4513","car_model":"SEDAN","blocked":false},{"name":"User 21","birth_date":"17/02/1997","cpf":"95214397003","car_plate":"JVI6512","car_model":"SEDAN","blocked":false},{"name":"User 22","birth_date":"17/02/1997","cpf":"80180454021","car_plate":"MNZ5244","car_model":"SEDAN","blocked":false},{"name":"User 23","birth_date":"17/02/1997","cpf":"00538195002","car_plate":"MZN4656","car_model":"SEDAN","blocked":false},{"name":"User 24","birth_date":"17/02/1997","cpf":"60036375012","car_plate":"AXL4293","car_model":"SEDAN","blocked":false},{"name":"User 25","birth_date":"17/02/1997","cpf":"25296225074","car_plate":"KEE6569","car_model":"SEDAN","blocked":false},{"name":"User 26","birth_date":"17/02/1997","cpf":"53162222028","car_plate":"IBN3961","car_model":"SEDAN","blocked":false},{"name":"User 27","birth_date":"17/02/1997","cpf":"21861303009","car_plate":"MPU0476","car_model":"SEDAN","blocked":false},{"name":"User 28","birth_date":"17/02/1997","cpf":"77153887008","car_plate":"JVY6553","car_model":"SEDAN","blocked":false},{"name":"User 29","birth_date":"17/02/1997","cpf":"18714372029","car_plate":"JVH9646","car_model":"SEDAN","blocked":false},{"name":"User 30","birth_date":"17/02/1997","cpf":"49170269033","car_plate":"JRB0270","car_model":"SEDAN","blocked":false},{"name":"User 31","birth_date":"17/02/1997","cpf":"29276530037","car_plate":"NDW4609","car_model":"SEDAN","blocked":false},{"name":"User 32","birth_date":"17/02/1997","cpf":"10999313045","car_plate":"HWO8807","car_model":"SEDAN","blocked":false},{"name":"User 33","birth_date":"17/02/1997","cpf":"01661021050","car_plate":"JVT9373","car_model":"SEDAN","blocked":false}]
+[
+  {
+    "name": "User 1",
+    "birth_date": "17/02/1997",
+    "cpf": "45761953013",
+    "car_plate": "MZG9638",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "SP",
+      "city": "São Paulo",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 2",
+    "birth_date": "17/02/1997",
+    "cpf": "06711655001",
+    "car_plate": "KAL3944",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "SP",
+      "city": "São Paulo",
+      "street": "Avenida Paulista"
+    }
+  },
+  {
+    "name": "User 3",
+    "birth_date": "17/02/1997",
+    "cpf": "73591103004",
+    "car_plate": "IKZ4547",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "SP",
+      "city": "Santo Andre",
+      "street": "Vila Bela Vista"
+    }
+  },
+  {
+    "name": "User 4",
+    "birth_date": "17/02/1997",
+    "cpf": "14630782001",
+    "car_plate": "JIN3438",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "SP",
+      "city": "Campinas",
+      "street": "Rua Taquaritinga"
+    }
+  },
+  {
+    "name": "User 5",
+    "birth_date": "17/02/1997",
+    "cpf": "66874995057",
+    "car_plate": "MYJ5282",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 6",
+    "birth_date": "17/02/1997",
+    "cpf": "16752170096",
+    "car_plate": "KAW9324",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 7",
+    "birth_date": "17/02/1997",
+    "cpf": "10031207090",
+    "car_plate": "MVO7550",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Rua Evaristo da Veiga"
+    }
+  },
+  {
+    "name": "User 8",
+    "birth_date": "17/02/1997",
+    "cpf": "64296789031",
+    "car_plate": "KYB1026",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Nova Iguaçu",
+      "street": "Rua Carlos Gomes"
+    }
+  },
+  {
+    "name": "User 9",
+    "birth_date": "17/02/1997",
+    "cpf": "77163334028",
+    "car_plate": "KAP7360",
+    "car_model": "VAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 10",
+    "birth_date": "17/02/1997",
+    "cpf": "40119022095",
+    "car_plate": "KDT5711",
+    "car_model": "VAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 11",
+    "birth_date": "17/02/1997",
+    "cpf": "32019897032",
+    "car_plate": "HLQ8450",
+    "car_model": "VAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 12",
+    "birth_date": "17/02/1997",
+    "cpf": "52160472042",
+    "car_plate": "NET0066",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 13",
+    "birth_date": "17/02/1997",
+    "cpf": "06230238063",
+    "car_plate": "MWJ0025",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 14",
+    "birth_date": "17/02/1997",
+    "cpf": "61424994004",
+    "car_plate": "MXD0092",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 15",
+    "birth_date": "17/02/1997",
+    "cpf": "27411540072",
+    "car_plate": "LEO8064",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 16",
+    "birth_date": "17/02/1997",
+    "cpf": "41984425099",
+    "car_plate": "MVY5355",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 17",
+    "birth_date": "17/02/1997",
+    "cpf": "41964113040",
+    "car_plate": "HWG4167",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 18",
+    "birth_date": "17/02/1997",
+    "cpf": "26405252043",
+    "car_plate": "KAR1080",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 19",
+    "birth_date": "17/02/1997",
+    "cpf": "77998516003",
+    "car_plate": "GDL3128",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 20",
+    "birth_date": "17/02/1997",
+    "cpf": "48166087022",
+    "car_plate": "MWA4513",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 21",
+    "birth_date": "17/02/1997",
+    "cpf": "95214397003",
+    "car_plate": "JVI6512",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 22",
+    "birth_date": "17/02/1997",
+    "cpf": "80180454021",
+    "car_plate": "MNZ5244",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 23",
+    "birth_date": "17/02/1997",
+    "cpf": "00538195002",
+    "car_plate": "MZN4656",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 24",
+    "birth_date": "17/02/1997",
+    "cpf": "60036375012",
+    "car_plate": "AXL4293",
+    "car_model": "SUV",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 25",
+    "birth_date": "17/02/1997",
+    "cpf": "25296225074",
+    "car_plate": "KEE6569",
+    "car_model": "SUV",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 26",
+    "birth_date": "17/02/1997",
+    "cpf": "53162222028",
+    "car_plate": "IBN3961",
+    "car_model": "SUV",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 27",
+    "birth_date": "17/02/1997",
+    "cpf": "21861303009",
+    "car_plate": "MPU0476",
+    "car_model": "SUV",
+    "blocked": true,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 28",
+    "birth_date": "17/02/1997",
+    "cpf": "77153887008",
+    "car_plate": "JVY6553",
+    "car_model": "SUV",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 29",
+    "birth_date": "17/02/1997",
+    "cpf": "18714372029",
+    "car_plate": "JVH9646",
+    "car_model": "SUV",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 30",
+    "birth_date": "17/02/1997",
+    "cpf": "49170269033",
+    "car_plate": "JRB0270",
+    "car_model": "SUV",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 31",
+    "birth_date": "17/02/1997",
+    "cpf": "29276530037",
+    "car_plate": "NDW4609",
+    "car_model": "SUV",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 32",
+    "birth_date": "17/02/1997",
+    "cpf": "10999313045",
+    "car_plate": "HWO8807",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 33",
+    "birth_date": "17/02/1997",
+    "cpf": "01661021050",
+    "car_plate": "JVT9373",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "RJ",
+      "city": "Rio de Janeiro",
+      "street": "Avenida Rio Branco"
+    }
+  },
+  {
+    "name": "User 33",
+    "birth_date": "1997-02-12",
+    "cpf": "81956384065",
+    "car_plate": "JVT1573",
+    "car_model": "PICKUP",
+    "blocked": false
+  }
+]

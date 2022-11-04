@@ -1,14 +1,21 @@
+import { Type } from 'class-transformer';
 import {
   IsBoolean,
+  IsDate,
+  IsDateString,
   IsDefined,
   IsEnum,
   IsNotEmpty,
+  IsNotEmptyObject,
+  IsObject,
   IsOptional,
   Matches,
   MaxLength,
   MinLength,
+  ValidateNested,
 } from 'class-validator';
 import { CarModel } from '../entities/car-model.enum';
+import { Address } from '../entities/driver-address';
 
 export class CreateDriverDto {
   @IsDefined({
@@ -28,11 +35,10 @@ export class CreateDriverDto {
   @IsNotEmpty({
     message: 'birth date is required',
   })
-  @Matches(
-    /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
-    { message: 'birth_date must have dd/mm/yyyy format' },
-  )
-  birth_date: string;
+  @IsDateString({
+    message: 'it will accept format yyyy-mm-dd',
+  })
+  birth_date: Date;
 
   @IsNotEmpty({
     message: 'cpf is required',
@@ -62,4 +68,12 @@ export class CreateDriverDto {
   @IsOptional()
   @IsBoolean()
   blocked?: boolean;
+
+  @ValidateNested({ each: true })
+  @IsObject({
+    message: 'location is an object containing: state, street and city',
+  })
+  @IsNotEmptyObject()
+  @Type(() => Address)
+  location: Address;
 }
