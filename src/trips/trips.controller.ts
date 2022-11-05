@@ -59,13 +59,27 @@ export class TripsController {
   }
 
   @Get('pending')
-  public async findPending() {
-    return await this.tripsService.findPending();
+  public async findPending(): Promise<NestResponse> {
+    const pending = await this.tripsService.findPending();
+    return new NestResponseBuilder()
+      .withStatus(HttpStatus.OK)
+      .withHeaders({
+        Location: `/trips/pending`,
+      })
+      .withBody(pending)
+      .build();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tripsService.findOne(id);
+  public async findOne(@Param('id') id: string): Promise<NestResponse> {
+    const response = await this.tripsService.findOne(id);
+    return new NestResponseBuilder()
+      .withStatus(HttpStatus.OK)
+      .withHeaders({
+        Location: `/trips/${id}`,
+      })
+      .withBody(response)
+      .build();
   }
 
   @Put(':id')
@@ -85,7 +99,14 @@ export class TripsController {
   }
 
   @Delete(':id')
-  public async remove(@Param('id') id: string) {
-    return await this.tripsService.remove(id);
+  public async remove(@Param('id') id: string): Promise<NestResponse> {
+    await this.tripsService.remove(id);
+    return new NestResponseBuilder()
+      .withStatus(HttpStatus.OK)
+      .withHeaders({
+        Location: `/trips/${id}`,
+      })
+      .withBody({ message: `trip deleted` })
+      .build();
   }
 }

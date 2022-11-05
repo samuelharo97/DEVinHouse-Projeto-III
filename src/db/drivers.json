@@ -1,6 +1,6 @@
 [
   {
-    "name": "Driver 1",
+    "name": "Driver 01",
     "birth_date": "1997-02-17",
     "cpf": "06711655001",
     "car_plate": "KAL3944",
@@ -11,7 +11,39 @@
       "city": "São Paulo",
       "street": "Avenida Paulista",
       "lat": -23.5613545,
-      "lgn": -46.6564943
+      "lon": -46.6564943
+    },
+    "completed_trips": []
+  },
+  {
+    "name": "Driver 2",
+    "birth_date": "1997-02-17",
+    "cpf": "56251748060",
+    "car_plate": "KYB1026",
+    "car_model": "HATCHBACK",
+    "blocked": false,
+    "location": {
+      "state": "SP",
+      "city": "São Paulo",
+      "street": "R. Manuel Oliveira Bueno",
+      "lat": -23.5276598,
+      "lon": -46.5341956
+    },
+    "completed_trips": []
+  },
+  {
+    "name": "Driver 2",
+    "birth_date": "1997-02-17",
+    "cpf": "16752170096",
+    "car_plate": "KAW9324",
+    "car_model": "SEDAN",
+    "blocked": false,
+    "location": {
+      "state": "SP",
+      "city": "São Paulo",
+      "street": "R. Mateus Clemente",
+      "lat": -23.595636,
+      "lon": -46.7571693
     },
     "completed_trips": []
   }

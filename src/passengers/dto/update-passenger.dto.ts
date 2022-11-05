@@ -1,4 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
+import { Type } from 'class-transformer';
 import { IsBoolean, IsOptional } from 'class-validator';
 import { CreatePassengerDto } from './create-passenger.dto';
 

@@ -10,7 +10,7 @@ import { Utils } from 'src/utils/utils';
 import { Trip } from './entities/trip.entity';
 import { TRIP_STATUS } from './entities/trip.enum';
 import { Passenger } from 'src/passengers/entities/passenger.entity';
-import { HttpService } from '@nestjs/axios';
+import { Driver } from 'src/drivers/entities/driver.entity';
 
 @Injectable()
 export class TripsService {
@@ -24,36 +24,64 @@ export class TripsService {
   }
 
   public async create(trip: Trip, cpf: string): Promise<Trip> {
-    const passenger: Passenger = await this.getPassenger(cpf);
+    const tripPassenger: Passenger = await this.getPassenger(cpf);
 
-    if (!passenger) {
+    if (!tripPassenger) {
       throw new NotFoundException({
         message: 'passenger not found',
       });
     }
 
-    if (passenger.blocked) {
+    if (tripPassenger.blocked) {
       throw new UnauthorizedException({
-        message: `user ${passenger.name} is currently blocked`,
+        message: `user ${tripPassenger.name} is currently blocked`,
       });
     }
 
-    trip.passenger_id = passenger.cpf;
-    trip.starting_from = trip.starting_from || passenger.address;
+    if (trip.starting_from) {
+      const origin = `${trip.starting_from.street}, ${trip.starting_from.city}, ${trip.starting_from.state}`;
+      const destination = `${trip.starting_from.street}, ${trip.starting_from.city}, ${trip.starting_from.state}`;
+      const data = await this.util.getGoogleData(origin, destination);
+
+      trip.starting_from.lat = data.routes[0].legs[0].start_location.lat;
+      trip.starting_from.lon = data.routes[0].legs[0].start_location.lng;
+    }
+
+    trip.passenger_id = tripPassenger.cpf;
+    trip.starting_from = trip.starting_from || tripPassenger.address;
     trip.trip_id = uuidv4();
     trip.created_at = `${new Date().toLocaleDateString(
       'pt-BR',
     )}, ${new Date().toLocaleTimeString()}`;
+
     trip.trip_status = TRIP_STATUS.CREATED;
+
     const origin = `${trip.starting_from.street}, ${trip.starting_from.city}, ${trip.starting_from.state}`;
+
     const destination = `${trip.final_destination.street}, ${trip.final_destination.city}, ${trip.final_destination.state}`;
+
     const data = await this.util.getGoogleData(origin, destination);
+
     trip.duration = data.routes[0].legs[0].duration.text;
     trip.distance = data.routes[0].legs[0].distance.text;
-    trip.value = (parseFloat(trip.distance) * 3).toLocaleString('pt-BR', {
+    trip.price = (parseFloat(trip.distance) * 3).toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
     });
+
+    const passengers = await this.database.loadData(
+      this.database.PASSENGERS_FILE,
+    );
+
+    //adds trip_id to passenger's ordered_trip array
+    const updatedPassengers = passengers.map((passenger: Passenger) => {
+      if (passenger.cpf === tripPassenger.cpf) {
+        passenger.ordered_trips.push(trip.trip_id);
+      }
+      return passenger;
+    });
+
+    this.database.rewriteData(updatedPassengers, this.database.PASSENGERS_FILE);
 
     this.database.saveData(trip, this.database.TRIPS_FILE);
 
@@ -65,7 +93,7 @@ export class TripsService {
     return trips;
   }
 
-  public async findPending() {
+  public async findPending(): Promise<Trip[]> {
     const trips: Trip[] = await this.database.loadData(
       this.database.TRIPS_FILE,
     );
@@ -82,8 +110,10 @@ export class TripsService {
     return pendingTrips;
   }
 
-  public async getNearby(driverCpf: string) {
+  public async getNearby(driverCpf: string): Promise<Trip[]> {
     const driver = await this.getDriver(driverCpf);
+
+    const nearbyTrips = [];
 
     const trips: Trip[] = await this.database.loadData(
       this.database.TRIPS_FILE,
@@ -92,10 +122,20 @@ export class TripsService {
       (trip: Trip) => trip.trip_status == TRIP_STATUS.CREATED,
     );
 
-    const nearbyTrips = pendingTrips.filter(
-      (trip) => trip.starting_from.city == driver.location.city,
-    );
-    console.log(nearbyTrips);
+    pendingTrips.map((trip) => {
+      const distanceInKm = this.util.getDistanceFromLatLonInKm(
+        trip.starting_from.lat,
+        trip.starting_from.lon,
+        driver.location.lat,
+        driver.location.lon,
+      );
+      if (distanceInKm < 15) {
+        nearbyTrips.push(trip);
+      }
+      console.log(
+        `Distance from ${driver.name} is = ${distanceInKm.toFixed(2)} km`,
+      );
+    });
 
     if (nearbyTrips.length == 0) {
       throw new NotFoundException({
@@ -106,12 +146,12 @@ export class TripsService {
     return nearbyTrips;
   }
 
-  public async getDriver(cpf: string) {
+  public async getDriver(cpf: string): Promise<Driver> {
     const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
     return drivers.find((driver) => driver.cpf == cpf);
   }
 
-  public async getTrip(id: string) {
+  public async getTrip(id: string): Promise<Trip> {
     const trips = await this.database.loadData(this.database.TRIPS_FILE);
     return trips.find((trip: Trip) => trip.trip_id == id);
   }

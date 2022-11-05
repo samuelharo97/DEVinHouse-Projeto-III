@@ -9,7 +9,6 @@ import {
   IsNotEmptyObject,
   IsDateString,
 } from 'class-validator';
-import { Trip } from 'src/trips/entities/trip.entity';
 import { Address } from './passenger-address';
 
 export class Passenger {
@@ -48,5 +47,5 @@ export class Passenger {
 
   blocked?: boolean;
 
-  completed_trips?: Trip[];
+  ordered_trips?: string[];
 }

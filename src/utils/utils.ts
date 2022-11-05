@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import haversine from 'haversine-distance';
 import { firstValueFrom, map } from 'rxjs';
 import { HttpService } from '@nestjs/axios';
 import { ConfigService } from '@nestjs/config';
@@ -19,18 +18,29 @@ export class Utils {
     return updatedCpf;
   }
 
-  //this calculates distance between two points in a straight line - haversine method taken from stack overflow
-  public findDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
-    const point_1 = { latitude: lat1, longitude: lng1 };
-    const point_2 = { latitude: lat2, longitude: lng2 };
-    const haversine_meters = haversine(point_1, point_2);
-    const distance_km = haversine_meters / 1000;
+  //this calculates distance between two points in a straight line - method taken from stack overflow
+  public getDistanceFromLatLonInKm(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number,
+  ) {
+    const R = 6371; // Radius of the earth in km
+    const dLat = this.deg2rad(lat2 - lat1); // deg2rad below
+    const dLon = this.deg2rad(lon2 - lon1);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.deg2rad(lat1)) *
+        Math.cos(this.deg2rad(lat2)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; // Distance in km
+    return d;
+  }
 
-    if (distance_km > 6) {
-      return false;
-    } else {
-      return true;
-    }
+  public deg2rad(deg: number) {
+    return deg * (Math.PI / 180);
   }
 
   // script taken from stack overflow
@@ -70,7 +80,8 @@ export class Utils {
   }
 
   public async getGoogleData(origin: string, destination: string) {
-    const URL = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination},&key=${this.API_KEY}`;
+    const URL = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination},&key=${this.API_KEY}&units=metric`;
+
     const data = await firstValueFrom(
       this.httpService.get(URL).pipe(map((response) => response.data)),
     );

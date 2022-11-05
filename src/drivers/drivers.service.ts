@@ -53,7 +53,7 @@ export class DriversService {
     const data = await this.util.getGoogleData(origin, destination);
 
     driver.location.lat = data.routes[0].legs[0].start_location.lat;
-    driver.location.lgn = data.routes[0].legs[0].start_location.lng;
+    driver.location.lon = data.routes[0].legs[0].start_location.lng;
 
     this.database.saveData(driver, this.database.DRIVERS_FILE);
 
@@ -113,15 +113,25 @@ export class DriversService {
       });
     }
 
+    if (body.location) {
+      const origin = `${body.location.street}, ${body.location.city}, ${body.location.state}`;
+      const destination = `${body.location.street}, ${body.location.city}, ${body.location.state}`;
+      const data = await this.util.getGoogleData(origin, destination);
+
+      body.location.lat = data.routes[0].legs[0].start_location.lat;
+      body.location.lon = data.routes[0].legs[0].start_location.lng;
+    }
+
     const drivers = await this.database.loadData(this.database.DRIVERS_FILE);
 
-    const updatedDrivers = drivers.map((driver) => {
+    const updatedDrivers = drivers.map((driver: Driver) => {
       if (driver.cpf === cpf) {
         driver.name = body.name || driver.name;
         driver.birth_date = body.birth_date || driver.birth_date;
         driver.car_plate = body.car_plate || driver.car_plate;
         driver.car_model = body.car_model || driver.car_model;
         driver.blocked = body.blocked || driver.blocked;
+        driver.location = body.location || driver.location;
       }
       return driver;
     });

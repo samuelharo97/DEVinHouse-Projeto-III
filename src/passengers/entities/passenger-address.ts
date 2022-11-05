@@ -21,5 +21,5 @@ export class Address {
 
   lat?: number;
 
-  lgn?: number;
+  lon?: number;
 }

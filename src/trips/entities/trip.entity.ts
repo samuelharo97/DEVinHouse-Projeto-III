@@ -43,5 +43,5 @@ export class Trip {
 
   distance?: string;
 
-  value?: string;
+  price?: string;
 }

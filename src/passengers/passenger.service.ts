@@ -44,12 +44,14 @@ export class PassengerService {
       });
     }
 
+    passenger.ordered_trips = [];
+
     const origin = `${passenger.address.street}, ${passenger.address.city}, ${passenger.address.state}`;
     const destination = `${passenger.address.street}, ${passenger.address.city}, ${passenger.address.state}`;
     const data = await this.util.getGoogleData(origin, destination);
 
-    passenger.address.lat = data.routes[0].legs[0].start_address.lat;
-    passenger.address.lgn = data.routes[0].legs[0].start_address.lng;
+    passenger.address.lat = data.routes[0].legs[0].start_location.lat;
+    passenger.address.lon = data.routes[0].legs[0].start_location.lng;
 
     passenger.blocked = passenger.blocked || false;
 
@@ -104,7 +106,7 @@ export class PassengerService {
     cpf: string,
     body: UpdatePassengerDto,
   ): Promise<Passenger> {
-    const passengerExists = await this.getPassenger(cpf);
+    const passengerExists: Passenger = await this.getPassenger(cpf);
 
     if (!passengerExists) {
       throw new NotFoundException({
@@ -117,15 +119,21 @@ export class PassengerService {
       this.database.PASSENGERS_FILE,
     );
 
+    if (body.address) {
+      const origin = `${body.address.street}, ${body.address.city}, ${body.address.state}`;
+      const destination = `${body.address.street}, ${body.address.city}, ${body.address.state}`;
+      const data = await this.util.getGoogleData(origin, destination);
+
+      body.address.lat = data.routes[0].legs[0].start_location.lat;
+      body.address.lon = data.routes[0].legs[0].start_location.lng;
+    }
+
     const updatedPassengers = passengers.map((passenger: Passenger) => {
       if (passenger.cpf === cpf) {
         passenger.name = body.name || passenger.name;
         passenger.birth_date = body.birth_date || passenger.birth_date;
         passenger.blocked = body.blocked || passenger.blocked;
-        passenger.address.city = body.address.city || passenger.address.city;
-        passenger.address.state = body.address.state || passenger.address.state;
-        passenger.address.street =
-          body.address.street || passenger.address.street;
+        passenger.address = body.address || passenger.address;
       }
       return passenger;
     });

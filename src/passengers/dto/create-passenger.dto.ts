@@ -6,7 +6,7 @@ import {
   ValidateNested,
   IsObject,
   IsNotEmptyObject,
-  IsDate,
+  IsDateString,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Address } from '../entities/passenger-address';
@@ -26,7 +26,7 @@ export class CreatePassengerDto {
   @IsNotEmpty({
     message: 'birth date is required',
   })
-  @IsDate()
+  @IsDateString()
   birth_date: Date;
 
   @IsNotEmpty({
