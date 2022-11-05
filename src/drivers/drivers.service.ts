@@ -7,7 +7,6 @@ import {
 import { Utils } from 'src/utils/utils';
 import { Database } from '../db/database';
 import { BlockDriverDTO } from './dto/block-driver.dto';
-import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
 import { Driver } from './entities/driver.entity';
 
@@ -27,18 +26,10 @@ export class DriversService {
     }
 
     const driverExists = await this.getDriver(driver.cpf);
-    const plateExists = await this.getPlates(driver.car_plate);
     if (driverExists) {
       throw new ConflictException({
         statusCode: 409,
         message: 'A driver with the same CPF is already registered',
-      });
-    }
-
-    if (plateExists) {
-      throw new ConflictException({
-        statusCode: 409,
-        message: 'A car with the same license plate is already registered',
       });
     }
 
@@ -54,6 +45,15 @@ export class DriversService {
     }
 
     driver.blocked = driver.blocked || false;
+
+    driver.completed_trips = [];
+
+    const origin = `${driver.location.street}, ${driver.location.city}, ${driver.location.state}`;
+    const destination = `${driver.location.street}, ${driver.location.city}, ${driver.location.state}`;
+    const data = await this.util.getGoogleData(origin, destination);
+
+    driver.location.lat = data.routes[0].legs[0].start_location.lat;
+    driver.location.lgn = data.routes[0].legs[0].start_location.lng;
 
     this.database.saveData(driver, this.database.DRIVERS_FILE);
 
@@ -134,12 +134,18 @@ export class DriversService {
   }
 
   public async remove(cpf: string) {
-    const driver = await this.getDriver(cpf);
+    const driver: Driver = await this.getDriver(cpf);
 
     if (!driver) {
       throw new NotFoundException({
         statusCode: 404,
         message: 'driver not found',
+      });
+    }
+
+    if (driver.completed_trips.length > 0) {
+      throw new ConflictException({
+        message: "Can't delete an active driver.",
       });
     }
 

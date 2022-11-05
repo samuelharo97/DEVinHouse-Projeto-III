@@ -1,13 +1,39 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import haversine from 'haversine-distance';
+import { firstValueFrom, map } from 'rxjs';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class Utils {
+  private API_KEY = this.config.get('API_KEY');
+
+  constructor(
+    private config: ConfigService,
+    private httpService: HttpService,
+  ) {}
+
   public cleanCpf(cpf: string) {
     const removeHyphen = cpf.replace('-', '');
     const updatedCpf = removeHyphen.replaceAll('.', '');
     return updatedCpf;
   }
 
+  //this calculates distance between two points in a straight line - haversine method taken from stack overflow
+  public findDistance(lat1: number, lng1: number, lat2: number, lng2: number) {
+    const point_1 = { latitude: lat1, longitude: lng1 };
+    const point_2 = { latitude: lat2, longitude: lng2 };
+    const haversine_meters = haversine(point_1, point_2);
+    const distance_km = haversine_meters / 1000;
+
+    if (distance_km > 6) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  // script taken from stack overflow
   public validateCPF(cpf: string) {
     if (cpf == '') return false;
     // Elimina CPFs invalidos conhecidos
@@ -43,13 +69,15 @@ export class Utils {
     return true;
   }
 
+  public async getGoogleData(origin: string, destination: string) {
+    const URL = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination},&key=${this.API_KEY}`;
+    const data = await firstValueFrom(
+      this.httpService.get(URL).pipe(map((response) => response.data)),
+    );
+    return data;
+  }
+
   public underAgeValidate(birthday: string) {
-    /* const year = birthday.slice(6, birthday.length);
-    const month = birthday.slice(3, 5);
-    const day = birthday.slice(0, 2);
-
-    const formatedBirthday = year + '/' + month + '/' + day; */
-
     // script below taken from: https://www.good-codes.com/javascript-calculate-age-from-date-of-birth-js/
 
     // it will accept two types of format yyyy-mm-dd and yyyy/mm/dd
@@ -78,6 +106,7 @@ export class Utils {
     return car_plate;
   }
 
+  // pagination taken from stack overflow - added a few changes
   public paginate(array: any[], page: any, size: any) {
     if (page <= 0) {
       throw new BadRequestException({
@@ -105,7 +134,6 @@ export class Utils {
       });
     }
 
-    // filter
     return [
       ...array.filter((value, index) => {
         return index >= page * size && index < (page + 1) * size;

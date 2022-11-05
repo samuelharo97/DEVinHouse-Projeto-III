@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -10,19 +11,10 @@ import { Trip } from './entities/trip.entity';
 import { TRIP_STATUS } from './entities/trip.enum';
 import { Passenger } from 'src/passengers/entities/passenger.entity';
 import { HttpService } from '@nestjs/axios';
-import { ConfigService } from '@nestjs/config';
-import { firstValueFrom, lastValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class TripsService {
-  private API_KEY = this.config.get('API_KEY');
-
-  constructor(
-    private database: Database,
-    private util: Utils,
-    private config: ConfigService,
-    private httpService: HttpService,
-  ) {}
+  constructor(private database: Database, private util: Utils) {}
 
   public async getPassenger(cpf: string) {
     const passengers = await this.database.loadData(
@@ -55,7 +47,7 @@ export class TripsService {
     trip.trip_status = TRIP_STATUS.CREATED;
     const origin = `${trip.starting_from.street}, ${trip.starting_from.city}, ${trip.starting_from.state}`;
     const destination = `${trip.final_destination.street}, ${trip.final_destination.city}, ${trip.final_destination.state}`;
-    const data = await this.getGoogleData(origin, destination);
+    const data = await this.util.getGoogleData(origin, destination);
     trip.duration = data.routes[0].legs[0].duration.text;
     trip.distance = data.routes[0].legs[0].distance.text;
     trip.value = (parseFloat(trip.distance) * 3).toLocaleString('pt-BR', {
@@ -100,13 +92,9 @@ export class TripsService {
       (trip: Trip) => trip.trip_status == TRIP_STATUS.CREATED,
     );
 
-    const nearbyTrips = await Promise.all(
-      pendingTrips.map(async (trip) => {
-        if (trip.starting_from.city == driver.location.city) {
-        }
-      }),
+    const nearbyTrips = pendingTrips.filter(
+      (trip) => trip.starting_from.city == driver.location.city,
     );
-
     console.log(nearbyTrips);
 
     if (nearbyTrips.length == 0) {
@@ -116,14 +104,6 @@ export class TripsService {
     }
 
     return nearbyTrips;
-  }
-
-  public async getGoogleData(origin: string, destination: string) {
-    const URL = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination},&key=${this.API_KEY}`;
-    const data = await firstValueFrom(
-      this.httpService.get(URL).pipe(map((response) => response.data)),
-    );
-    return data;
   }
 
   public async getDriver(cpf: string) {
@@ -176,6 +156,25 @@ export class TripsService {
 
   //This action removes a trip by ID
   public async remove(id: string) {
-    return `This action removes a trip by ID`;
+    const trip: Trip = await this.getTrip(id);
+
+    if (!trip) {
+      throw new NotFoundException({
+        statusCode: 404,
+        message: 'trip not found',
+      });
+    }
+    if (trip.trip_status == TRIP_STATUS.ACCEPTED) {
+      throw new ConflictException({
+        statusCode: 409,
+        message: "can't delete a trip in progress",
+      });
+    }
+
+    const trips = await this.database.loadData(this.database.TRIPS_FILE);
+
+    const updatedList = trips.filter((tip) => tip.trip_id !== id);
+
+    this.database.rewriteData(updatedList, this.database.TRIPS_FILE);
   }
 }

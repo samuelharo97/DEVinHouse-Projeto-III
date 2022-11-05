@@ -3,6 +3,7 @@
 /node_modules
 script.js
 .env
+old-data.json
 response.json
 
 # Logs

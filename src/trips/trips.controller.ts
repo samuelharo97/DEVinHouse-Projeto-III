@@ -86,6 +86,6 @@ export class TripsController {
 
   @Delete(':id')
   public async remove(@Param('id') id: string) {
-    return this.tripsService.remove(id);
+    return await this.tripsService.remove(id);
   }
 }

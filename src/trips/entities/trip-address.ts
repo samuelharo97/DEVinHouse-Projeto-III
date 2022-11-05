@@ -18,4 +18,8 @@ export class Address {
   @IsString()
   @MaxLength(50)
   street: string;
+
+  lat?: number;
+
+  lgn?: number;
 }

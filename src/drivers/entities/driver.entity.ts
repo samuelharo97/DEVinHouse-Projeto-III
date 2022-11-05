@@ -7,6 +7,7 @@ import {
   MinLength,
   IsDateString,
 } from 'class-validator';
+import { Trip } from 'src/trips/entities/trip.entity';
 import { CarModel } from './car-model.enum';
 import { Address } from './driver-address';
 
@@ -60,4 +61,6 @@ export class Driver {
   location: Address;
 
   blocked?: boolean;
+
+  completed_trips?: Trip[];
 }

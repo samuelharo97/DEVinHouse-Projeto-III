@@ -44,6 +44,13 @@ export class PassengerService {
       });
     }
 
+    const origin = `${passenger.address.street}, ${passenger.address.city}, ${passenger.address.state}`;
+    const destination = `${passenger.address.street}, ${passenger.address.city}, ${passenger.address.state}`;
+    const data = await this.util.getGoogleData(origin, destination);
+
+    passenger.address.lat = data.routes[0].legs[0].start_address.lat;
+    passenger.address.lgn = data.routes[0].legs[0].start_address.lng;
+
     passenger.blocked = passenger.blocked || false;
 
     this.database.saveData(passenger, this.database.PASSENGERS_FILE);
