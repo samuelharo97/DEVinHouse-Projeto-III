@@ -130,7 +130,6 @@ export class DriversService {
         driver.birth_date = body.birth_date || driver.birth_date;
         driver.car_plate = body.car_plate || driver.car_plate;
         driver.car_model = body.car_model || driver.car_model;
-        driver.blocked = body.blocked || driver.blocked;
         driver.location = body.location || driver.location;
       }
       return driver;

@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Query,
   Put,
+  BadRequestException,
 } from '@nestjs/common';
 import { NestResponse } from 'src/core/http/nest-response';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
@@ -16,7 +17,9 @@ import { DriversService } from './drivers.service';
 import { BlockDriverDTO } from './dto/block-driver.dto';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('drivers')
 @Controller('drivers')
 export class DriversController {
   constructor(private readonly driversService: DriversService) {}
@@ -92,6 +95,11 @@ export class DriversController {
 
   @Patch('/block/:cpf')
   public async block(@Param('cpf') cpf: string, @Body() body: BlockDriverDTO) {
+    console.log(body);
+    if (body.blocked == undefined) {
+      throw new BadRequestException();
+    }
+
     const driver = await this.driversService.block(cpf, body);
 
     return new NestResponseBuilder()

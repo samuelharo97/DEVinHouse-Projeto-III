@@ -1,14 +1,11 @@
 import { Type } from 'class-transformer';
 import {
-  IsBoolean,
-  IsDate,
   IsDateString,
   IsDefined,
   IsEnum,
   IsNotEmpty,
   IsNotEmptyObject,
   IsObject,
-  IsOptional,
   Matches,
   MaxLength,
   MinLength,
@@ -16,8 +13,10 @@ import {
 } from 'class-validator';
 import { CarModel } from '../entities/car-model.enum';
 import { Address } from '../entities/driver-address';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateDriverDto {
+  @ApiProperty()
   @IsDefined({
     message: `name can't be null`,
   })
@@ -32,6 +31,10 @@ export class CreateDriverDto {
   })
   name: string;
 
+  @ApiProperty({
+    description: 'ISO 8601',
+    example: 'yyyy-mm-dd',
+  })
   @IsNotEmpty({
     message: 'birth date is required',
   })
@@ -40,6 +43,7 @@ export class CreateDriverDto {
   })
   birth_date: Date;
 
+  @ApiProperty()
   @IsNotEmpty({
     message: 'cpf is required',
   })
@@ -48,6 +52,10 @@ export class CreateDriverDto {
   })
   cpf: string;
 
+  @ApiProperty({
+    description: 'valid car plate with no hyphens (-)',
+    example: 'MZW4550, MYF8104, IAO4372, ADC9313',
+  })
   @IsNotEmpty({
     message: 'car plate is required',
   })
@@ -57,6 +65,7 @@ export class CreateDriverDto {
   })
   car_plate: string;
 
+  @ApiProperty()
   @IsNotEmpty({
     message: 'car model is required',
   })
@@ -65,10 +74,7 @@ export class CreateDriverDto {
   })
   car_model: CarModel;
 
-  @IsOptional()
-  @IsBoolean()
-  blocked?: boolean;
-
+  @ApiProperty()
   @ValidateNested({ each: true })
   @IsObject({
     message: 'location is an object containing: state, street and city',

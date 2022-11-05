@@ -12,8 +12,10 @@ import { TripsService } from './trips.service';
 import { CreateTripDto } from './dto/create-trip.dto';
 import { NestResponse } from 'src/core/http/nest-response';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
-import { Trip } from './entities/trip.entity';
+import { ApiTags } from '@nestjs/swagger';
+import { UpdateTripDto } from './dto/update-trip.dto';
 
+@ApiTags('trips')
 @Controller('trips')
 export class TripsController {
   constructor(private readonly tripsService: TripsService) {}
@@ -85,7 +87,7 @@ export class TripsController {
   @Put(':id')
   public async update(
     @Param('id') id: string,
-    @Body() updateTripDto: Trip,
+    @Body() updateTripDto: UpdateTripDto,
   ): Promise<NestResponse> {
     const updatedTrip = await this.tripsService.update(id, updateTripDto);
 

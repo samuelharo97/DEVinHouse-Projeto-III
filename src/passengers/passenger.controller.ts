@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Query,
   Put,
+  BadRequestException,
 } from '@nestjs/common';
 import { NestResponse } from 'src/core/http/nest-response';
 import { PassengerService } from './passenger.service';
@@ -16,7 +17,9 @@ import { CreatePassengerDto } from './dto/create-passenger.dto';
 import { UpdatePassengerDto } from './dto/update-passenger.dto';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
 import { BlockPassengerDTO } from './dto/block-passenger.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('passengers')
 @Controller('passengers')
 export class PassengerController {
   constructor(private readonly passengersService: PassengerService) {}
@@ -100,6 +103,9 @@ export class PassengerController {
     @Param('cpf') cpf: string,
     @Body() body: BlockPassengerDTO,
   ) {
+    if (body.blocked == undefined) {
+      throw new BadRequestException();
+    }
     const passenger = await this.passengersService.block(cpf, body);
 
     return new NestResponseBuilder()

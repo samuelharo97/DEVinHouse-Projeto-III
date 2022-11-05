@@ -1,6 +1,8 @@
 import { IsNotEmpty, MaxLength, IsString, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class Address {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @MaxLength(2, {
@@ -9,11 +11,13 @@ export class Address {
   @MinLength(2)
   state: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @MaxLength(30)
   city: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   @MaxLength(50)
