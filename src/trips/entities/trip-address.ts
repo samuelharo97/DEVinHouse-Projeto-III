@@ -1,9 +1,12 @@
-import { IsNotEmpty, MaxLength, IsString } from 'class-validator';
+import { IsNotEmpty, MaxLength, IsString, MinLength } from 'class-validator';
 
 export class Address {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(15)
+  @MaxLength(2, {
+    message: 'state must be abbreviated, example: SP, MG, RJ',
+  })
+  @MinLength(2)
   state: string;
 
   @IsNotEmpty()

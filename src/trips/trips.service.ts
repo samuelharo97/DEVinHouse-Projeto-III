@@ -9,11 +9,20 @@ import { Utils } from 'src/utils/utils';
 import { Trip } from './entities/trip.entity';
 import { TRIP_STATUS } from './entities/trip.enum';
 import { Passenger } from 'src/passengers/entities/passenger.entity';
-import { Driver } from 'src/drivers/entities/driver.entity';
+import { HttpService } from '@nestjs/axios';
+import { ConfigService } from '@nestjs/config';
+import { firstValueFrom, lastValueFrom, map } from 'rxjs';
 
 @Injectable()
 export class TripsService {
-  constructor(private database: Database, private util: Utils) {}
+  private API_KEY = this.config.get('API_KEY');
+
+  constructor(
+    private database: Database,
+    private util: Utils,
+    private config: ConfigService,
+    private httpService: HttpService,
+  ) {}
 
   public async getPassenger(cpf: string) {
     const passengers = await this.database.loadData(
@@ -44,6 +53,15 @@ export class TripsService {
       'pt-BR',
     )}, ${new Date().toLocaleTimeString()}`;
     trip.trip_status = TRIP_STATUS.CREATED;
+    const origin = `${trip.starting_from.street}, ${trip.starting_from.city}, ${trip.starting_from.state}`;
+    const destination = `${trip.final_destination.street}, ${trip.final_destination.city}, ${trip.final_destination.state}`;
+    const data = await this.getGoogleData(origin, destination);
+    trip.duration = data.routes[0].legs[0].duration.text;
+    trip.distance = data.routes[0].legs[0].distance.text;
+    trip.value = (parseFloat(trip.distance) * 3).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    });
 
     this.database.saveData(trip, this.database.TRIPS_FILE);
 
@@ -82,18 +100,30 @@ export class TripsService {
       (trip: Trip) => trip.trip_status == TRIP_STATUS.CREATED,
     );
 
-    const nearbyTrips = pendingTrips.filter(
-      (trips) =>
-        trips.starting_from.city == driver.location.city ||
-        trips.starting_from.state == driver.location.state,
+    const nearbyTrips = await Promise.all(
+      pendingTrips.map(async (trip) => {
+        if (trip.starting_from.city == driver.location.city) {
+        }
+      }),
     );
+
+    console.log(nearbyTrips);
 
     if (nearbyTrips.length == 0) {
       throw new NotFoundException({
         message: 'no nearby trips found',
       });
     }
+
     return nearbyTrips;
+  }
+
+  public async getGoogleData(origin: string, destination: string) {
+    const URL = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin}&destination=${destination},&key=${this.API_KEY}`;
+    const data = await firstValueFrom(
+      this.httpService.get(URL).pipe(map((response) => response.data)),
+    );
+    return data;
   }
 
   public async getDriver(cpf: string) {
@@ -115,6 +145,7 @@ export class TripsService {
     return trip;
   }
 
+  //This action updates a trip by ID
   public async update(id: string, body: Trip): Promise<Trip> {
     const tripExists = await this.getTrip(id);
 
@@ -143,7 +174,8 @@ export class TripsService {
     return updatedTrip;
   }
 
+  //This action removes a trip by ID
   public async remove(id: string) {
-    return `This action removes a #${id} trip`;
+    return `This action removes a trip by ID`;
   }
 }

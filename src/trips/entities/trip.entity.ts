@@ -38,4 +38,10 @@ export class Trip {
   @IsNotEmpty()
   @IsDate()
   created_at?: string;
+
+  duration?: string;
+
+  distance?: string;
+
+  value?: string;
 }
