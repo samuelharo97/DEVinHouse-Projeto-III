@@ -5,8 +5,10 @@ import {
   MinLength,
   IsOptional,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class UpdateAddress {
+  @ApiProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsString()
@@ -18,12 +20,14 @@ export class UpdateAddress {
   })
   state: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsString()
   @MaxLength(30)
   city: string;
 
+  @ApiProperty()
   @IsOptional()
   @IsNotEmpty()
   @IsString()

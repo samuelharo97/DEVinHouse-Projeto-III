@@ -131,8 +131,8 @@ export class PassengerService {
     const updatedPassengers = passengers.map((passenger: Passenger) => {
       if (passenger.cpf === cpf) {
         passenger.name = body.name || passenger.name;
+        passenger.cpf = body.cpf || passenger.cpf;
         passenger.birth_date = body.birth_date || passenger.birth_date;
-        passenger.blocked = body.blocked || passenger.blocked;
         passenger.address = body.address || passenger.address;
       }
       return passenger;

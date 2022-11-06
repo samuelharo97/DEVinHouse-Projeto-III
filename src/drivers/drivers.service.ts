@@ -128,6 +128,7 @@ export class DriversService {
       if (driver.cpf === cpf) {
         driver.name = body.name || driver.name;
         driver.birth_date = body.birth_date || driver.birth_date;
+        driver.cpf = body.cpf || driver.cpf;
         driver.car_plate = body.car_plate || driver.car_plate;
         driver.car_model = body.car_model || driver.car_model;
         driver.location = body.location || driver.location;

@@ -10,8 +10,10 @@ import {
 } from 'class-validator';
 import { Type } from 'class-transformer';
 import { Address } from '../entities/passenger-address';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePassengerDto {
+  @ApiProperty()
   @MaxLength(50, {
     message: `name can't be longer than 50 characters`,
   })
@@ -23,12 +25,14 @@ export class CreatePassengerDto {
   })
   name: string;
 
+  @ApiProperty()
   @IsNotEmpty({
     message: 'birth date is required',
   })
   @IsDateString()
   birth_date: Date;
 
+  @ApiProperty()
   @IsNotEmpty({
     message: 'cpf is required',
   })
@@ -37,11 +41,10 @@ export class CreatePassengerDto {
   })
   cpf: string;
 
+  @ApiProperty()
   @ValidateNested({ each: true })
   @IsObject()
   @IsNotEmptyObject()
   @Type(() => Address)
   address: Address;
-
-  blocked?: boolean;
 }

@@ -1,17 +1,15 @@
 import { Type } from 'class-transformer';
 import {
-  IsNotEmpty,
-  IsUUID,
-  IsEnum,
-  IsDate,
   ValidateNested,
   IsObject,
   IsNotEmptyObject,
   IsOptional,
 } from 'class-validator';
 import { Address } from '../entities/trip-address';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateTripDto {
+  @ApiProperty()
   @ValidateNested({ each: true })
   @IsObject()
   @IsNotEmptyObject()
@@ -19,6 +17,7 @@ export class CreateTripDto {
   @Type(() => Address)
   starting_from?: Address;
 
+  @ApiProperty()
   @ValidateNested({ each: true })
   @IsObject()
   @IsNotEmptyObject()
