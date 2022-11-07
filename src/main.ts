@@ -3,6 +3,8 @@ import { NestFactory } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as yaml from 'js-yaml';
+import { writeFileSync } from 'fs';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,10 +23,15 @@ async function bootstrap() {
     .addTag('passengers')
     .build();
 
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
   const document = SwaggerModule.createDocument(app, config);
 
+  const swaggerYaml = yaml.dump(document);
+  writeFileSync('swagger.yaml', swaggerYaml);
+
   SwaggerModule.setup('api', app, document);
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
   await app.listen(3000);
 }
 bootstrap();

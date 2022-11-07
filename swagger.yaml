@@ -1,0 +1,424 @@
+openapi: 3.0.0
+paths:
+  /passengers:
+    post:
+      operationId: PassengerController_create
+      summary: Creates a new Passenger
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePassengerDto'
+      responses:
+        '201':
+          description: ''
+      tags: &ref_0
+        - passengers
+    get:
+      operationId: PassengerController_findAll
+      summary: Lists all passengers, with optional pagination and name query
+      parameters:
+        - name: name
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_0
+  /passengers/{cpf}:
+    get:
+      operationId: PassengerController_findOne
+      summary: Lists passenger details
+      parameters:
+        - name: cpf
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_0
+    put:
+      operationId: PassengerController_update
+      summary: Updates passenger
+      parameters:
+        - name: cpf
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePassengerDto'
+      responses:
+        '200':
+          description: ''
+      tags: *ref_0
+    delete:
+      operationId: PassengerController_remove
+      summary: Deletes a passenger
+      parameters:
+        - name: cpf
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_0
+  /passengers/block/{cpf}:
+    patch:
+      operationId: PassengerController_block
+      summary: Changes passenger.blocked to true of false
+      parameters:
+        - name: cpf
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockPassengerDTO'
+      responses:
+        '200':
+          description: ''
+      tags: *ref_0
+  /drivers:
+    post:
+      operationId: DriversController_create
+      summary: Creates a new Driver
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDriverDto'
+      responses:
+        '201':
+          description: ''
+      tags: &ref_1
+        - drivers
+    get:
+      operationId: DriversController_findAll
+      summary: Lists all drivers, with optional pagination and name query
+      parameters:
+        - name: name
+          required: true
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_1
+  /drivers/{cpf}:
+    get:
+      operationId: DriversController_findOne
+      summary: Lists driver details
+      parameters:
+        - name: cpf
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_1
+    put:
+      operationId: DriversController_update
+      summary: Updates driver
+      parameters:
+        - name: cpf
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDriverDto'
+      responses:
+        '200':
+          description: ''
+      tags: *ref_1
+    delete:
+      operationId: DriversController_remove
+      summary: Deletes a driver, if he is inactive (0 trips taken)
+      parameters:
+        - name: cpf
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_1
+  /drivers/block/{cpf}:
+    patch:
+      operationId: DriversController_block
+      summary: Changes driver.blocked to true of false
+      parameters:
+        - name: cpf
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BlockDriverDTO'
+      responses:
+        '200':
+          description: ''
+      tags: *ref_1
+  /trips/new/{passengerCPF}:
+    post:
+      operationId: TripsController_create
+      summary: Creates new trip
+      parameters:
+        - name: passengerCPF
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTripDto'
+      responses:
+        '201':
+          description: ''
+      tags: &ref_2
+        - trips
+  /trips/nearby/{driverCPF}:
+    post:
+      operationId: TripsController_findNearby
+      summary: Lists trips nearby driver
+      description: >-
+        If post body has driver.location, this route will list trips 15km around
+        the location's coordinates, but, this request can also be made with NO
+        BODY, then, driver.location will be taken from the drivers default
+        location (the location registered when driver was created).
+      parameters:
+        - name: driverCPF
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverLocationDto'
+      responses:
+        '201':
+          description: ''
+      tags: *ref_2
+  /trips:
+    get:
+      operationId: TripsController_findAll
+      summary: Lists all trips
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: *ref_2
+  /trips/pending:
+    get:
+      operationId: TripsController_findPending
+      summary: Lists all trips with status = created
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags: *ref_2
+  /trips/{id}:
+    get:
+      operationId: TripsController_findOne
+      summary: Lists trip details
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_2
+    put:
+      operationId: TripsController_update
+      summary: Updates a trip
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTripDto'
+      responses:
+        '200':
+          description: ''
+      tags: *ref_2
+    delete:
+      operationId: TripsController_remove
+      summary: Deletes a trip
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags: *ref_2
+info:
+  title: LabCar
+  description: The LabCar API
+  version: '1.0'
+  contact: {}
+tags:
+  - name: drivers
+    description: ''
+  - name: trips
+    description: ''
+  - name: passengers
+    description: ''
+servers: []
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        state:
+          type: string
+        city:
+          type: string
+        street:
+          type: string
+      required:
+        - state
+        - city
+        - street
+    CreatePassengerDto:
+      type: object
+      properties:
+        name:
+          type: string
+        birth_date:
+          format: date-time
+          type: string
+        cpf:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+        - name
+        - birth_date
+        - cpf
+        - address
+    UpdatePassengerDto:
+      type: object
+      properties: {}
+    BlockPassengerDTO:
+      type: object
+      properties:
+        blocked:
+          type: boolean
+      required:
+        - blocked
+    CreateDriverDto:
+      type: object
+      properties:
+        name:
+          type: string
+        birth_date:
+          format: date-time
+          type: string
+          description: ISO 8601
+          example: yyyy-mm-dd
+        cpf:
+          type: string
+        car_plate:
+          type: string
+          description: valid car plate with no hyphens (-)
+          example: MZW4550, MYF8104, IAO4372, ADC9313
+        car_model:
+          type: number
+        location:
+          $ref: '#/components/schemas/Address'
+      required:
+        - name
+        - birth_date
+        - cpf
+        - car_plate
+        - car_model
+        - location
+    UpdateDriverDto:
+      type: object
+      properties: {}
+    BlockDriverDTO:
+      type: object
+      properties:
+        blocked:
+          type: boolean
+      required:
+        - blocked
+    CreateTripDto:
+      type: object
+      properties:
+        starting_from:
+          $ref: '#/components/schemas/Address'
+        final_destination:
+          $ref: '#/components/schemas/Address'
+      required:
+        - starting_from
+        - final_destination
+    DriverLocationDto:
+      type: object
+      properties:
+        location:
+          description: >-
+            OPTIONAL, if undefined, the default driver location will be used
+            instead
+          example: |-
+            {
+                  "state": "RJ",
+                  "city": "Rio de Janeiro",
+                  "street": "Copacabana"
+                }
+          allOf:
+            - $ref: '#/components/schemas/Address'
+      required:
+        - location
+    UpdateTripDto:
+      type: object
+      properties: {}
