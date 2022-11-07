@@ -17,13 +17,14 @@ import { CreatePassengerDto } from './dto/create-passenger.dto';
 import { UpdatePassengerDto } from './dto/update-passenger.dto';
 import { NestResponseBuilder } from 'src/core/http/nest-response-builder';
 import { BlockPassengerDTO } from './dto/block-passenger.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('passengers')
 @Controller('passengers')
 export class PassengerController {
   constructor(private readonly passengersService: PassengerService) {}
 
+  @ApiOperation({ summary: 'Creates a new Passenger' })
   @Post()
   public async create(
     @Body() passenger: CreatePassengerDto,
@@ -39,6 +40,9 @@ export class PassengerController {
       .build();
   }
 
+  @ApiOperation({
+    summary: 'Lists all passengers, with optional pagination and name query',
+  })
   @Get()
   public async findAll(
     @Query('page') page = 0,
@@ -55,6 +59,7 @@ export class PassengerController {
       .build();
   }
 
+  @ApiOperation({ summary: 'Lists passenger details' })
   @Get(':cpf')
   public async findOne(@Param('cpf') cpf: string): Promise<NestResponse> {
     const passenger = await this.passengersService.findOne(cpf);
@@ -68,6 +73,7 @@ export class PassengerController {
       .build();
   }
 
+  @ApiOperation({ summary: 'Updates passenger' })
   @Put(':cpf')
   public async update(
     @Param('cpf') cpf: string,
@@ -86,6 +92,7 @@ export class PassengerController {
       .build();
   }
 
+  @ApiOperation({ summary: 'Deletes a passenger' })
   @Delete(':cpf')
   public async remove(@Param('cpf') cpf: string): Promise<NestResponse> {
     await this.passengersService.remove(cpf);
@@ -98,6 +105,7 @@ export class PassengerController {
       .build();
   }
 
+  @ApiOperation({ summary: 'Changes passenger.blocked to true of false' })
   @Patch('/block/:cpf')
   public async block(
     @Param('cpf') cpf: string,

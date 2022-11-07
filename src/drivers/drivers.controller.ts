@@ -17,13 +17,14 @@ import { DriversService } from './drivers.service';
 import { BlockDriverDTO } from './dto/block-driver.dto';
 import { CreateDriverDto } from './dto/create-driver.dto';
 import { UpdateDriverDto } from './dto/update-driver.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 @ApiTags('drivers')
 @Controller('drivers')
 export class DriversController {
   constructor(private readonly driversService: DriversService) {}
 
+  @ApiOperation({ summary: `Creates a new Driver` })
   @Post()
   public async create(@Body() body: CreateDriverDto) {
     const driver = await this.driversService.create(body);
@@ -37,6 +38,9 @@ export class DriversController {
       .build();
   }
 
+  @ApiOperation({
+    summary: `Lists all drivers, with optional pagination and name query`,
+  })
   @Get()
   public async findAll(
     @Query('page') page = 0,
@@ -53,6 +57,9 @@ export class DriversController {
       .build();
   }
 
+  @ApiOperation({
+    summary: `Lists driver details`,
+  })
   @Get(':cpf')
   public async findOne(@Param('cpf') cpf: string): Promise<NestResponse> {
     const driver = await this.driversService.findOne(cpf);
@@ -66,6 +73,9 @@ export class DriversController {
       .build();
   }
 
+  @ApiOperation({
+    summary: `Updates driver`,
+  })
   @Put(':cpf')
   public async update(
     @Param('cpf') cpf: string,
@@ -81,6 +91,9 @@ export class DriversController {
       .build();
   }
 
+  @ApiOperation({
+    summary: `Deletes a driver, if he is inactive (0 trips taken)`,
+  })
   @Delete(':cpf')
   public async remove(@Param('cpf') cpf: string): Promise<NestResponse> {
     await this.driversService.remove(cpf);
@@ -93,6 +106,9 @@ export class DriversController {
       .build();
   }
 
+  @ApiOperation({
+    summary: `Changes driver.blocked to true of false`,
+  })
   @Patch('/block/:cpf')
   public async block(@Param('cpf') cpf: string, @Body() body: BlockDriverDTO) {
     console.log(body);

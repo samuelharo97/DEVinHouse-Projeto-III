@@ -11,6 +11,7 @@ import { Trip } from './entities/trip.entity';
 import { TRIP_STATUS } from './entities/trip.enum';
 import { Passenger } from 'src/passengers/entities/passenger.entity';
 import { Driver } from 'src/drivers/entities/driver.entity';
+import { DriverLocationDto } from './dto/driver-location.dto';
 
 @Injectable()
 export class TripsService {
@@ -110,8 +111,20 @@ export class TripsService {
     return pendingTrips;
   }
 
-  public async getNearby(driverCpf: string): Promise<Trip[]> {
+  public async getNearby(
+    driverCpf: string,
+    body: DriverLocationDto,
+  ): Promise<Trip[]> {
     const driver = await this.getDriver(driverCpf);
+
+    if (body.location) {
+      const origin = `${body.location.street}, ${body.location.city}, ${body.location.state}`;
+      const destination = `${body.location.street}, ${body.location.city}, ${body.location.state}`;
+      const data = await this.util.getGoogleData(origin, destination);
+
+      driver.location.lat = data.routes[0].legs[0].start_location.lat;
+      driver.location.lon = data.routes[0].legs[0].start_location.lng;
+    }
 
     const nearbyTrips = [];
 
