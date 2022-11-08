@@ -1,73 +1,138 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+<!-- prettier-ignore -->
+# DEVinHouse Project II - LabCar
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is the third big challenge from DEVinHouse course in collaboration with the company Intelbras, where the proposition was to create a CRUD-like REST API using NEST.JS to manage an UBER-like application.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+<img src="https://iili.io/pYli1S.png"></img>
 
-## Description
+## Getting Started
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+To install the dependencies you need to run **npm or yarn** command:
 
-## Installation
-
-```bash
+```
 $ npm install
+
+$ yarn install
+
 ```
 
-## Running the app
+## Commands
 
-```bash
-# development
-$ npm run start
+In the project directory you can run:
 
-# watch mode
-$ npm run start:dev
+### **npm run start:dev**
 
-# production mode
-$ npm run start:prod
+Runs the application in development mode. Which will run at: http://localhost:3000
+
+#### Swagger
+
+```
+Access swagger's API documentation at http://localhost:3000/api
+
 ```
 
-## Test
+## Configs
 
-```bash
-# unit tests
-$ npm run test
+To run the project, it is necessary to create the .env file in the project root, and add your google API key
 
-# e2e tests
-$ npm run test:e2e
+```
+API_KEY='your-api-key'
 
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
+## Endpoints
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Drivers
 
-## Stay in touch
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+POST
+/drivers
+Creates a new Driver
 
-## License
+GET
+/drivers
+Lists all drivers, with optional pagination and name query
 
-Nest is [MIT licensed](LICENSE).
+GET
+/drivers/{cpf}
+Lists driver details
+
+PUT
+/drivers/{cpf}
+Updates driver
+
+DELETE
+/drivers/{cpf}
+Deletes a driver, if he is inactive (0 trips taken)
+
+PATCH
+/drivers/block/{cpf}
+Changes driver.blocked to true of false
+
+```
+
+### Trips
+
+```
+
+POST
+/trips/new/{passengerCPF}
+Creates new trip
+
+POST
+/trips/nearby/{driverCPF}
+Lists trips nearby driver
+
+GET
+/trips
+Lists all trips
+
+GET
+/trips/pending
+Lists all trips with status = created
+
+GET
+/trips/{id}
+Lists trip details
+
+PUT
+/trips/{id}
+Updates a trip
+
+DELETE
+/trips/{id}
+Deletes a trip
+
+
+```
+
+### Passengers
+
+```
+
+POST
+/passengers
+Creates a new Passenger
+
+GET
+/passengers
+Lists all passengers, with optional pagination and name query
+
+GET
+/passengers/{cpf}
+Lists passenger details
+
+PUT
+/passengers/{cpf}
+Updates passenger
+
+DELETE
+/passengers/{cpf}
+Deletes a passenger
+
+PATCH
+/passengers/block/{cpf}
+Changes passenger.blocked to true of false
+
+```
