@@ -3,7 +3,7 @@
 
 This project is the third big challenge from DEVinHouse course in collaboration with the company Intelbras, where the proposition was to create a CRUD-like REST API using NEST.JS to manage an UBER-like application.
 
-<img src="https://iili.io/pYli1S.png"></img>
+<img style="text-align:center" src="https://iili.io/pYli1S.png"></img>
 
 ## Getting Started
 
