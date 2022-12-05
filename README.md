@@ -1,5 +1,5 @@
 <!-- prettier-ignore -->
-# DEVinHouse Project II - LabCar
+# DEVinHouse Project III - LabCar
 
 This project is the third big challenge from DEVinHouse course in collaboration with the company Intelbras, where the proposition was to create a CRUD-like REST API using NEST.JS to manage an UBER-like application.
 
