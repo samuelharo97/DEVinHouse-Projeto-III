@@ -33,7 +33,7 @@ Access swagger's API documentation at http://localhost:3000/api
 
 ## Configs
 
-To run the project, it is necessary to create the .env file in the project root, and add your google API key
+To run the project, it is necessary to create the .env file in the project root, and add your google-directions API key
 
 ```
 API_KEY='your-api-key'
